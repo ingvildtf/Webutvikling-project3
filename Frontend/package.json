@@ -10,12 +10,25 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+<<<<<<< HEAD:package.json
     "express": "^4.17.1",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.9",
+=======
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/styled-components": "^5.1.4",
+    "bootstrap": "^4.5.3",
+    "materialize-css": "^1.0.0-rc.2",
+>>>>>>> develop:Frontend/package.json
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3",
+    "react-focus-lock": "^2.4.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^3.4.4",
+    "redux": "^4.0.5",
+    "styled-components": "^5.2.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
