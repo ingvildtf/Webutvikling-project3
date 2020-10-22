@@ -1,6 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
+import Filter from './components/Filter'
 
 function App() {
   return (
@@ -18,9 +19,11 @@ function App() {
         >
           Learn React
         </a>
+        <br />
+        <Filter />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
