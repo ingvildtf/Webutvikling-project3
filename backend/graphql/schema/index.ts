@@ -20,6 +20,7 @@ module.exports = buildSchema(`
         }
         type RootQuery{
             recipes: [Recipe!]!
+            searchRecipes(category: String!): Recipe
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
