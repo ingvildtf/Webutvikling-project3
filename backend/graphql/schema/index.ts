@@ -3,18 +3,18 @@ const {buildSchema} = require('graphql');
 module.exports = buildSchema(`
         type Recipe {
             _id: ID!
-            recipeName: String!
-            time: Float!
-            mealType: String!
-            description: String!
-            ingredients: String!
-            image: String
+            ID: String!
+            Name: String!
+            Category: String!
+            Instruction: String
+            Ingredients: String!
+            Image: String
         }
         input RecipeInput{
-            recipeName: String!
-            time: Float!
-            mealType: String!
-            description: String!
+            ID: String!
+            name: String!
+            category: String!
+            instruction: String
             ingredients: String!
             image: String
         }

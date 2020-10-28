@@ -7,24 +7,24 @@ const RecipesSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    name: {
+    Name: {
         type: String,
         required: true,
     },
     
-    category:{
+    Category:{
         type: String,
         required: true,
     },
-    instruction:{
+    Instruction:{
         type: String,
         required: true,
     },
-    ingredients: {
+    Ingredients: {
         type: String,
         required: true,
     }, 
-    image: {
+    Image: {
         type: String,
         required: false,
     }
