@@ -9,6 +9,22 @@ const graphQlSchema = require('./graphql/schema/index.ts')
 const graphQlResolvers = require('./graphql/resolvers/index.ts')
 
 const app = express()
+//app.use(bodyParser.json)
+
+//Vet ikke om denne funker!!! 
+//allow cross origin request. * every hos, client, location can sendt request to this server
+app.use((req, res, next)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  //control which kind of request they can make 
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  //controls which kind of header we can set for the request we are sending to that server
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  //for optionsrequest want to respond 200 
+  if(req.method === 'OPTIONS'){
+    return res.sendStatus(200);
+  }
+  next(); 
+})
 
 const router = express.Router();
 
