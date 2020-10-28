@@ -1,19 +1,22 @@
 const mongoose = require('mongoose')
 
+//ID,Name,Category,Instruction,Ingredients,Image
+
 const RecipesSchema = new mongoose.Schema({
-    recipeName: {
+    ID: {
         type: String,
         required: true,
     },
-    time: {
-        type: Number,
-        required: true,
-    },
-    mealType:{
+    name: {
         type: String,
         required: true,
     },
-    description:{
+    
+    category:{
+        type: String,
+        required: true,
+    },
+    instruction:{
         type: String,
         required: true,
     },
