@@ -1,96 +1,87 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 // ***** REUSEABLE MODAL *******
-export const Wrapper1 = styled.div`
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 700;
-	width: inherit;
-	outline: 0;
-`;
+export const WrapperModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 700;
+  width: 70vw;
+
+  display: grid;
+  grid-template-rows: min-content min-content auto;
+  grid-template-columns: min-content auto;
+  grid-template-areas:
+    'title  title'
+    'img    cont'
+    'recipe recipe';
+
+  @media screen and (max-width: 800px) {
+    width: auto;
+    grid-template-columns: auto;
+    grid-template-rows: min-content min-content auto auto;
+    grid-template-areas:
+      'title'
+      'img'
+      'cont'
+      'recipe';
+  }
+`
 
 export const Backdrop = styled.div`
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background: rgba(0, 0, 0, 0.3);
-	z-index: 500;
-`;
-
-export const StyledModal = styled.div`
-	z-index: 100;
-	background: white;
-	position: relative;
-	margin: auto;
-	border-radius: 8px;
-`;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 500;
+`
 
 export const Header = styled.div`
-	border-radius: 8px 8px 0 0;
-	display: flex;
-	justify-content: space-between;
-	padding: 0.3rem;
-`;
-
-export const HeaderText = styled.div`
-	color: #fff;
-	align-self: center;
-	color: lightgray;
-`;
+  grid-area: title;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #afc9be;
+  color: #607878;
+  font-size: 18px;
+`
 
 export const CloseButton = styled.button`
-	font-size: 0.8rem;
-	border: none;
-	border-radius: 3px;
-	margin-left: 0.5rem;
-	background: none;
-	:hover {
-		cursor: pointer;
-	}
-`;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+  background: none;
+  :hover {
+    cursor: pointer;
+  }
+`
+export const Picture = styled.img`
+  grid-area: img;
+  width: 30vw;
+  height: auto;
+  padding: 5vw;
+  background-color: white;
+  @media screen and (max-width: 800px) {
+    justify-self: center;
+    width: 70vw;
+  }
+`
 
 export const Content = styled.div`
-	padding: 10px;
-	max-height: 30rem;
-	overflow-x: hidden;
-	overflow-y: auto;
-`;
-
-//****** RECIPE MODAL *******
-export const Wrapper = styled.div`
-    width: 80%;
-    @media(min-width: 768px) {
-    width: 60%;
-    }
-    @media(min-width: 1024px) {
-    width: 40%;
-    }
-`;
-
-export const ConfirmationButtons = styled.div`
-	display: flex;
-	justify-content: center;
-`;
-
-export const Message = styled.div`
-	font-size: 0.9rem;
-	margin-bottom: 10px;
-	text-align: center;
-`;
-
-//*** DEFINED ***/
-
-export const Picture = styled.div`
-
+  grid-area: cont;
+  padding: 5vw;
+  overflow: hidden;
+  background-color: white;
+  color: #607878;
 `
 
-export const Time = styled.div`
+export const Recipe = styled.div`
+  grid-area: recipe;
+  padding: 5vw;
+  background-color: white;
+  color: #607878;
 `
-
-export const Description = styled.div`
-`
-
