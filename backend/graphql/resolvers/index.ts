@@ -24,10 +24,10 @@ module.exports = {
             image: args.eventInput.image,
         } */
         const recipe = new Recipes({
-            recipeName: args.recipeInput.recipeName,
-            time: args.recipeInput.time,
-            mealType: args.recipeInput.mealType,
-            description: args.recipeInput.description,
+            ID: args.recipeInput.ID,
+            name: args.recipeInput.name,
+            category: args.recipeInput.category,
+            instruction: args.recipeInput.instruction,
             ingredients: args.recipeInput.ingredients,
             image: args.recipeInput.image,
         });
