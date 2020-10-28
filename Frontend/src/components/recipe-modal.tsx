@@ -1,34 +1,32 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react'
 import {
-	ConfirmationButtons,
-	Message,
-	Picture,
-	Time,
-	Description,
-	Wrapper,
-} from './modal.style';
+  //ConfirmationButtons,
+  Header,
+  //Picture,
+  //Time,
+  Recipe,
+  //Wrapper,
+  Content,
+} from './modal.style'
 
 interface ConfirmationModalProps {
-	onConfirm: () => void;
-	onCancel: () => void;
-  
-  title: string;
-  time: string;
-  description: string;
-  
+  onConfirm: () => void
+  onCancel: () => void
+
+  title: string
+  time: string
+  description: string
 }
 
 export const RecipeModal: FunctionComponent<ConfirmationModalProps> = props => {
-	return (
-		<React.Fragment>
-      <Message>{props.title}</Message>
-	  
-	  <Time>{props.time}</Time>
-	  <Description>{props.description}</Description>
+  return (
+    <React.Fragment>
+      <Header>{props.title}</Header>
 
-      <ConfirmationButtons>
-       
-      </ConfirmationButtons>
-		</React.Fragment>
-	);
-};
+      <Content>{props.time}</Content>
+      <Recipe>{props.description}</Recipe>
+
+      {/*  <ConfirmationButtons></ConfirmationButtons> */}
+    </React.Fragment>
+  )
+}
