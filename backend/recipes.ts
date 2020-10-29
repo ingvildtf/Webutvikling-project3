@@ -27,6 +27,10 @@ const RecipesSchema = new mongoose.Schema({
     Image: {
         type: String,
         required: false,
+    },
+    Review: {
+        type: [Number],
+        required: false 
     }
 },
 

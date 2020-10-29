@@ -1,4 +1,6 @@
-const {buildSchema} = require('graphql'); 
+const { buildSchema } = require('graphql')
+
+//GraphQL schema, with similar fields as in the database 
 
 module.exports = buildSchema(`
         type Recipe {
@@ -18,9 +20,13 @@ module.exports = buildSchema(`
             ingredients: String!
             image: String
         }
+        
         type RootQuery{
-            recipes: [Recipe!]!
-            searchRecipes(category: String!): Recipe
+            recipes(offset: Int, limit: Int): [Recipe!]!
+            searchRecipes(searchSequence: String!): [Recipe]
+            dinner: [Recipe!]!
+            dessert: [Recipe!]!
+            breakfast: [Recipe!]!
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
