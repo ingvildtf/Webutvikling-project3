@@ -11,6 +11,7 @@ module.exports = buildSchema(`
             Instruction: String
             Ingredients: String!
             Image: String
+            Review: [Int]
         }
         input RecipeInput{
             ID: String!
@@ -30,6 +31,7 @@ module.exports = buildSchema(`
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
+            review(id: String!, star: Int!): Recipe
         }
         schema {
             query: RootQuery
