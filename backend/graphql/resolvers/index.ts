@@ -119,5 +119,20 @@ module.exports = {
              console.log(err);
              throw err; 
          };
+     },
+     review: async (args) => { 
+         try{
+         //need to return to get a valid result 
+         const result = await Recipes.find({ID: args.id})
+         .update({$push: {Review: args.star}})
+         
+             console.log(result);
+             //leaves out all the metadata, property delivered by mongoose 
+             return {result};
+         }
+         catch(err) {
+             console.log(err);
+             throw err; 
+         };
      }
 }
