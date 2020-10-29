@@ -1,5 +1,7 @@
 import { FETCH_RECIPES, FILTER_RECIPES } from './types'
 
+//ACTION - describes what you want to do - function that creates a object'
+
 export const fetchRecipes = () => (dispatch: any) => {
   fetch('MongoDB')
     .then(res => res.json())
