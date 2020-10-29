@@ -125,11 +125,11 @@ module.exports = {
          try{
          //need to return to get a valid result 
          const result = await Recipes.find({ID: args.id})
-         result.update({$push: {Review: args.star}})
+         .update({$push: {Review: args.star}})
          
              console.log(result);
              //leaves out all the metadata, property delivered by mongoose 
-             return {...result._doc, _id: result._doc._id.toString()};
+             return {result};
          }
          catch(err) {
              console.log(err);
