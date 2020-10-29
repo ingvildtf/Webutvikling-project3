@@ -19,6 +19,7 @@
     "graphql": "^15.4.0",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",
+    "react-bottom-scroll-listener": "^4.1.1",
     "react-dom": "^16.13.1",
     "react-focus-lock": "^2.4.1",
     "react-redux": "^7.2.1",
