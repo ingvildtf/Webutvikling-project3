@@ -7,6 +7,7 @@ import { RecipeModal } from '../modal/recipe-modal'
 import { useModal } from '../modal/useModal'
 import { useQuery } from '@apollo/client'
 import { GET_RECIPE_QUERY } from '../../queries'
+import BottomScrollListener from 'react-bottom-scroll-listener'
 
 export const Wrapper = styled.div`
   margin-top: 10px;
@@ -66,9 +67,34 @@ const RecipesDisplay: FunctionComponent = () => {
     if (activeRecipe !== undefined) openModal()
   }, [activeRecipe])
 
-  const { loading, error, data } = useQuery(GET_RECIPE_QUERY)
+  const pageSize = 15
+  const [pageOffset, setPageOffset] = useState(0)
+  const [pageNumber, setPageNumber] = useState(1)
+
+  const { loading, error, data, fetchMore } = useQuery(GET_RECIPE_QUERY, {
+    variables: {
+      offset: pageOffset,
+    },
+  })
+
   if (loading) return <CardContent>Loading...</CardContent>
   if (error) return <CardContent>Error!</CardContent>
+
+  const fetchMoreRecipes = () => {
+    fetchMore({
+      variables: {
+        offset: pageSize * pageNumber,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        setPageOffset(pageOffset + pageSize)
+        setPageNumber(pageNumber + 1)
+        return Object.assign({}, prev, {
+          recipes: [...prev.recipes, ...fetchMoreResult.recipes],
+        })
+      },
+    })
+  }
 
   return (
     <Wrapper>
@@ -82,6 +108,7 @@ const RecipesDisplay: FunctionComponent = () => {
           <CardTitle>{recipe.Name}</CardTitle>
         </RecipeCard>
       ))}
+      <BottomScrollListener onBottom={fetchMoreRecipes} />
       {activeRecipe && (
         <Modal
           isShown={isShown}
