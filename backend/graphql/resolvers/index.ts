@@ -1,22 +1,21 @@
-const Recipes = require("../../recipes.ts")
+const Recipes = require('../../recipes.ts')
 
 module.exports = {
-
     //Queries 
     
     //function in the resolver 
     //returns all recipes in the database 
-    recipes: async () => {
-        try{
-        const recipes = await Recipes.find().sort({Name: 1})
-        return recipes.map(recipe =>{
-            return {...recipe._doc, _id: recipe._doc._id.toString()
-            }
-            })
-        }catch (err){
-            throw err; 
+    recipes: async args => {
+        try {
+          const recipes = await Recipes.find().sort({Name: 1}).skip(args.offset).limit(15)
+    
+          return recipes.map(recipe => {
+            return { ...recipe._doc, _id: recipe._doc._id.toString() }
+          })
+        } catch (err) {
+          throw err
         }
-    },
+      },
     
     searchRecipes: async args => {
         try{
@@ -27,7 +26,7 @@ module.exports = {
                 {Category: {$regex: args.searchSequence, $options: 'i'}}
             ]
             })
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -37,7 +36,7 @@ module.exports = {
         }
     },
 
-    dinner: async () =>{
+    dinner: async (args) =>{
         try{
             const recipes = await Recipes
             .find({$or:[
@@ -51,7 +50,7 @@ module.exports = {
                 {Category: "Lamb"},
                 {Category: "Goat"}
             ]})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -60,11 +59,11 @@ module.exports = {
             throw err;
         }
     },
-    dessert: async () =>{
+    dessert: async (args) =>{
         try{
             const recipes = await Recipes
             .find({Category: "Dessert"})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -73,11 +72,11 @@ module.exports = {
             throw err;
         }
     },
-    breakfast: async () =>{
+    breakfast: async (args) =>{
         try{
             const recipes = await Recipes
             .find({Category: "Breakfast"})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -115,6 +114,21 @@ module.exports = {
              console.log(result);
              //leaves out all the metadata, property delivered by mongoose 
              return {...result._doc, _id: result._doc._id.toString()};
+         }
+         catch(err) {
+             console.log(err);
+             throw err; 
+         };
+     },
+     review: async (args) => { 
+         try{
+         //need to return to get a valid result 
+         const result = await Recipes.find({ID: args.id})
+         .update({$push: {Review: args.star}})
+         
+             console.log(result);
+             //leaves out all the metadata, property delivered by mongoose 
+             return {result};
          }
          catch(err) {
              console.log(err);

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+//Mongoose Schema that is used as the fields in the database 
 //ID,Name,Category,Instruction,Ingredients,Image
 
 const RecipesSchema = new mongoose.Schema({
@@ -26,6 +27,10 @@ const RecipesSchema = new mongoose.Schema({
     }, 
     Image: {
         type: String,
+        required: false,
+    },
+    Review: {
+        type: [Number],
         required: false,
     }
 },
