@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import React, { Component, FunctionComponent, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { ApolloProvider } from '@apollo/client'
 //https://nainacodes.com/blog/create-an-accessible-and-reusable-react-modal
