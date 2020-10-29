@@ -4,10 +4,11 @@ module.exports = {
 
     //Queries 
     
-    //events a function in the resolver 
+    //function in the resolver 
+    //returns all recipes in the database 
     recipes: async () => {
         try{
-        const recipes = await Recipes.find()
+        const recipes = await Recipes.find().sort({Name: 1})
         return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -26,6 +27,7 @@ module.exports = {
                 {Category: {$regex: args.searchSequence, $options: 'i'}}
             ]
             })
+            .sort({Name: 1})
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -35,8 +37,58 @@ module.exports = {
         }
     },
 
+    dinner: async () =>{
+        try{
+            const recipes = await Recipes
+            .find({$or:[
+                {Category: "Chicken" },
+                {Category: "Beef"},
+                {Category: "Pork"},
+                {Category: "Vegeterian"},
+                {Category: "Vegan"},
+                {Category: "Pasta"},
+                {Category: "Seafood"},
+                {Category: "Lamb"},
+                {Category: "Goat"}
+            ]})
+            .sort({Name: 1})
+            return recipes.map(recipe =>{
+            return {...recipe._doc, _id: recipe._doc._id.toString()
+            }
+            })
+        }catch (err){
+            throw err;
+        }
+    },
+    dessert: async () =>{
+        try{
+            const recipes = await Recipes
+            .find({Category: "Dessert"})
+            .sort({Name: 1})
+            return recipes.map(recipe =>{
+            return {...recipe._doc, _id: recipe._doc._id.toString()
+            }
+            })
+        }catch (err){
+            throw err;
+        }
+    },
+    breakfast: async () =>{
+        try{
+            const recipes = await Recipes
+            .find({Category: "Breakfast"})
+            .sort({Name: 1})
+            return recipes.map(recipe =>{
+            return {...recipe._doc, _id: recipe._doc._id.toString()
+            }
+            })
+        }catch (err){
+            throw err;
+        }
+    },
+
     //Mutations
-    
+    //creates a new recipes 
     createRecipe: async (args) => {
         /* const event = {
              _id: Math.random.toString(),
