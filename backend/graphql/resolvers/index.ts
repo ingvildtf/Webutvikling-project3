@@ -1,22 +1,21 @@
-const Recipes = require("../../recipes.ts")
+const Recipes = require('../../recipes.ts')
 
 module.exports = {
-
     //Queries 
     
     //function in the resolver 
     //returns all recipes in the database 
-    recipes: async () => {
-        try{
-        const recipes = await Recipes.find().sort({Name: 1})
-        return recipes.map(recipe =>{
-            return {...recipe._doc, _id: recipe._doc._id.toString()
-            }
-            })
-        }catch (err){
-            throw err; 
+    recipes: async args => {
+        try {
+          const recipes = await Recipes.find().sort({Name: 1}).skip(args.offset).limit(15)
+    
+          return recipes.map(recipe => {
+            return { ...recipe._doc, _id: recipe._doc._id.toString() }
+          })
+        } catch (err) {
+          throw err
         }
-    },
+      },
     
     searchRecipes: async args => {
         try{

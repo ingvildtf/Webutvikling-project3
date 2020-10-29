@@ -1,4 +1,4 @@
-const {buildSchema} = require('graphql'); 
+const { buildSchema } = require('graphql')
 
 //GraphQL schema, with similar fields as in the database 
 
@@ -23,7 +23,7 @@ module.exports = buildSchema(`
         }
         
         type RootQuery{
-            recipes: [Recipe!]!
+            recipes(offset: Int, limit: Int): [Recipe!]!
             searchRecipes(searchSequence: String!): [Recipe]
             dinner: [Recipe!]!
             dessert: [Recipe!]!

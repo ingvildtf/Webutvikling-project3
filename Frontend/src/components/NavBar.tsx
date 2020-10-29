@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  background: #DACAC4; /* #faf0e6 */
+  background: #afc9be; /* #faf0e6 */
   height: 10vh;
   align-items: center;
   font-size: 1.2rem;
@@ -43,10 +43,10 @@ function Navbar() {
         </Link>
 
         {/**Setter navigasjonen til å være drop meny når siden blir under en størrelse */}
-        
+
         <Link className="link" to="/AboutUs">
           Om oss
-        </Link> 
+        </Link>
       </Container>
     </Wrapper>
   )

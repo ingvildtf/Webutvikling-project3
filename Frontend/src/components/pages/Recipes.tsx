@@ -1,163 +1,117 @@
-import React, { Component, FunctionComponent, useState } from "react";
-import { render } from "react-dom";
-import { Modal } from '../modal'
-import { RecipeModal } from '../recipe-modal'
-import { useModal } from '../useModal';
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import RecipesDisplay from './RecipesDisplay'
 
 //https://nainacodes.com/blog/create-an-
-import Form from '../form';
 
 export const Wrapper = styled.div`
-  margin: 10px;
-
+  margin: 5vw;
   display: grid;
-  background: #FFFFFF;
-  grid-template-rows: min-content min-content auto;
-  grid-template-columns: repeat(4,1fr);
-  height: 100vh;
+  background: white;
+  align-content: space-between;
+  justify-content: space-between;
+  grid-template-rows: min-content min-content min-content;
+  grid-template-columns: auto repeat(3, 1fr);
   grid-gap: 5px 0px;
   grid-template-areas:
-    'search search search button'
-    'categories recipes recipes recipes'
+    'search     search  search  button'
     'categories recipes recipes recipes';
-  
 
-  @media screen and (max-width: 1050px) {
-    grid-template-rows: repeat(5, min-content);
-    grid-template-columns: 1fr 1fr; 
+  @media screen and (max-width: 800px) {
+    grid-template-rows: repeat(3, min-content);
+    grid-template-columns: 1fr 1fr;
     height: auto;
     overflow: auto;
+    align-items: center;
+    justify-content: space-between;
     grid-template-areas:
-      'search button'
-      'categories categories'
-      'recipes recipes';
+      'search      button'
+      'categories  categories'
+      'recipes     recipes';
   }
 `
 /**** BUTTON AREA ****/
 const Button = styled.button`
-    padding: 2px 5px;
-    color: black;
-    height:50px;
-    width: 60%;
-    cursor: pointer;
-    font-family: 'Source Sans Pro', sans-serif;
-   
-    
+  grid-area: button;
+  color: #f2f2f2;
+  background-color: #607878;
+  height: 50px;
+  width: 12vw;
+  cursor: pointer;
+  font-family: 'Source Sans Pro', sans-serif;
+  outline: none;
 `
-const ButtonArea = styled.div `
-    grid-area: button;
-    position: relative;
-    display: flex;
-    justify-content: left;
-    align-items: left;
-   height:50px; 
-    
-
+const ButtonArea = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
 `
 
-/**** SEARCH BAR ****/
-const Search = styled.div`
-    grid-area: search;
-   height: 50px;
-    width: 100%;
-    text-align:center;
-
-    
-   
-`
 const SearchBar = styled.input`
-  
-    width:80%;
-    height: 50px;
-    font-size: 17px;
-    font-family: 'Source Sans Pro', sans-serif;
-  
+  grid-area: search;
+  width: 72vw;
+  height: 100%;
+  font-size: 17px;
+  font-family: 'Source Sans Pro', sans-serif;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #afc9be;
+
+  &:focus {
+    outline: none;
+  }
 `
 /**** CATEGORIES ****/
-const Categories= styled.div`
-    grid-area: categories;
-    text-decoration: none;
-    font-family: 'Source Sans Pro', sans-serif;
-    display: inline-block;
-    vertical-align: middle;
-    /*
-    text-align:center;
-    */
-
+const Categories = styled.div`
+  grid-area: categories;
+  padding-right: 2vw;
+  text-decoration: none;
+  font-family: 'Source Sans Pro', sans-serif;
+  display: inline-block;
+  vertical-align: middle;
 `
-const CheckBox = styled.input`
-
-`
+const CheckBox = styled.input``
 
 /**** RECIPES ****/
 const Recipe = styled.div`
-    grid-area: recipes;
-    
-    
+  grid-area: recipes;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 const Recipes: FunctionComponent = () => {
-    /** MODAL **/
-  const { isShown, toggle } = useModal();
-  const onConfirm = () => toggle();
-  const onCancel = () => toggle();
-
-  
-
-//https://www.youtube.com/watch?v=TWODzlTeZUM
+  //https://www.youtube.com/watch?v=TWODzlTeZUM
   return (
     <React.Fragment>
-        <Wrapper>
-       <Search>
-        <SearchBar type="search" placeholder="Hva har du lyst på i dag?"/> 
-       </Search>
-       <ButtonArea>
-            <Button type="submit">SØK</Button>
-       </ButtonArea>
+      <Wrapper>
+        <SearchBar type="search" placeholder="Hva har du lyst på i dag?" />
+
+        <ButtonArea>
+          <Button type="submit">SØK</Button>
+        </ButtonArea>
 
         <Categories>
-           
-            <h2>Kategorier</h2>
-            
-            <CheckBox type="checkbox" ></CheckBox>
-            <label> Frokost</label>
-            <br></br>
-            <CheckBox type="checkbox" ></CheckBox>
-            <label> Lunsj</label>
-            <br></br>
-            <CheckBox type="checkbox" ></CheckBox>
-            <label> Frokost</label>
-            <br></br>
-            
+          <h2>Kategorier</h2>
+
+          <CheckBox type="checkbox"></CheckBox>
+          <label> Frokost</label>
+          <br></br>
+          <CheckBox type="checkbox"></CheckBox>
+          <label> Lunsj</label>
+          <br></br>
+          <CheckBox type="checkbox"></CheckBox>
+          <label> Frokost</label>
+          <br></br>
         </Categories>
+
         <Recipe>
-
-          <RecipesDisplay></RecipesDisplay> 
-          {/* 
-        <Button onClick={toggle}>Open this recipe (picture here)</Button>
-      
-        <Modal
-          isShown={isShown}
-          hide={toggle}
-          headerText='Pasta BoloNICE'
-          modalContent={
-            <RecipeModal 
-              onConfirm={onConfirm} 
-              onCancel={onCancel}
-              title='title'
-            />
-          }
-        />  
- */}
-      
+          <RecipesDisplay />
         </Recipe>
-       
-        </Wrapper>
+      </Wrapper>
     </React.Fragment>
-
-  );
-};
+  )
+}
 
 export default Recipes

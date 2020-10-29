@@ -1,140 +1,125 @@
-
 import styled from 'styled-components'
-import '../materialized/materialize.css'
-import '../materialized/materialize.min.css'
 
-import React, { Component, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import { Modal } from '../modal'
-import { RecipeModal } from '../recipe-modal'
-import { useModal } from '../useModal';
-
+import { Modal } from '../modal/modal'
+import { RecipeModal } from '../modal/recipe-modal'
+import { useModal } from '../modal/useModal'
+import { useQuery } from '@apollo/client'
+import { GET_RECIPE_QUERY } from '../../queries'
+import BottomScrollListener from 'react-bottom-scroll-listener'
 
 export const Wrapper = styled.div`
-  margin: 10px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`
+interface RecipeCardProps {
+  title?: string
+  content?: string
+  image?: string
+}
 
+const RecipeCard = styled.div<RecipeCardProps>`
+  width: 250px;
+
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  font-size: 14px;
+  text-align: center;
   display: grid;
-  background: browm;
+  grid-template-columns: 1fr;
   grid-template-rows: min-content min-content;
-  grid-template-columns: repeat(2,1fr);
-  height: 100vh;
-  grid-gap: 5px;
   grid-template-areas:
-    'recipe recipe';
-  
-
-  @media screen and (max-width: 1050px) {
-    grid-template-rows: repeat(5, min-content);
-    grid-template-columns: 1fr; 
-    height: auto;
-    overflow: auto;
-    grid-template-areas:
-      'recipe'
-      'recipe';
-  }
+    'img'
+    'title';
 `
-const Button = styled.button`
-    padding: 2px 5px;
-    color: black;
-    height:50px;
-    width: 60%;
-    cursor: pointer;
-    font-family: 'Source Sans Pro', sans-serif;
-   
-    
+const CardImage = styled.img`
+  grid-area: img;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  border-radius: 4px 4px 0px 0px;
 `
 
+const CardTitle = styled.div<RecipeCardProps>`
+  grid-area: title;
+  font-size: 18px;
+  padding-top: 20px;
+  height: auto;
+`
 
+const CardContent = styled.div<RecipeCardProps>`
+  grid-area: description;
+  padding: 5px;
+  height: auto;
+`
 
-const recipes = [{
-    name: "Pizzabolle",
-    content: [{
-        imageUrl: "https://brands-a.prod.onewp.net/app/uploads/sites/4/2018/09/Pizzaboller.jpg",
-        time: "1 hour",
-        description: "Not healthy, but good as hell."
+const RecipesDisplay: FunctionComponent = () => {
+  const { isShown, openModal, closeModal } = useModal()
+  const [activeRecipe, setActiveRecipe] = useState()
+
+  useEffect(() => {
+    if (activeRecipe !== undefined) openModal()
+  }, [activeRecipe])
+
+  const pageSize = 15
+  const [pageOffset, setPageOffset] = useState(0)
+  const [pageNumber, setPageNumber] = useState(1)
+
+  const { loading, error, data, fetchMore } = useQuery(GET_RECIPE_QUERY, {
+    variables: {
+      offset: pageOffset,
+    },
+  })
+
+  if (loading) return <CardContent>Loading...</CardContent>
+  if (error) return <CardContent>Error!</CardContent>
+
+  const fetchMoreRecipes = () => {
+    fetchMore({
+      variables: {
+        offset: pageSize * pageNumber,
       },
-      
-    ]
-  },
-  {
-    name: "Tomatsuppe",
-    content: [{
-        imageUrl: "https://idagranjansen.com/wp-content/uploads/tomatsuppe__p2b6663.jpg",
-        time: "2 hours",
-        description: "This is the perfect dish."
-      }
-    ]
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        setPageOffset(pageOffset + pageSize)
+        setPageNumber(pageNumber + 1)
+        return Object.assign({}, prev, {
+          recipes: [...prev.recipes, ...fetchMoreResult.recipes],
+        })
+      },
+    })
   }
-];
 
-
-const RecipesDisplay: FunctionComponent = () =>{
-
-  const { isShown, toggle } = useModal();
-  const onConfirm = () => toggle();
-  const onCancel = () => toggle();
-
-    return (/*
-      <Wrapper>
-        return <div> 
-        {
-      recipes.map((item, index) => {
-        return ( <div>
-            <h1>{item.name}</h1>
-            { item.content.map((c, i) => <div>
-                <img src={c.imageUrl}></img>  
-            <h3>{c.time}</h3>
-            <h3>{c.description}</h3>
-            </div>)}
-          </div>
-        )
-      }
-      )
-    }
-    </div>
-    </Wrapper>*/
+  return (
     <Wrapper>
-        {recipes.map((item, index) => {
-        return (
-        <div className="row">
-        <div className="col s12 m6">
-        <div className="card" onClick= {toggle}>
-            <div className="card-image">
-            <img src={item.content[0].imageUrl}/>
-            
-            
-            </div>
-            <div className="card-content">
-            <span className="card-title">{item.name}</span>   
-            <p>{item.content[0].description}</p>
-            </div>
-        </div>
-        </div>
-    </div>
-        )})
-    }
-     <Button onClick={toggle}>Open this recipe (picture here)</Button>
-      
-      <Modal
-        isShown={isShown}
-        hide={toggle}
-        headerText='Pasta BoloNICE'
-        modalContent={
-          <RecipeModal 
-            onConfirm={onConfirm} 
-            onCancel={onCancel}
-            title='hei'
-            time = 'ja'
-            description = 'nje'
-          />
-        }
-      />  
+      {data.recipes.map((recipe: any) => (
+        <RecipeCard
+          onClick={() => {
+            setActiveRecipe(recipe)
+          }}
+        >
+          <CardImage src={recipe.Image} />
+          <CardTitle>{recipe.Name}</CardTitle>
+        </RecipeCard>
+      ))}
+      <BottomScrollListener onBottom={fetchMoreRecipes} />
+      {activeRecipe && (
+        <Modal
+          isShown={isShown}
+          hide={closeModal}
+          modalContent={
+            <RecipeModal closeModal={closeModal} recipe={activeRecipe!} />
+          }
+        />
+      )}
+    </Wrapper>
+  )
+}
 
-    
-      
-    </Wrapper>   
-    )
-    
-  }
-  
-  export default RecipesDisplay;
+export default RecipesDisplay
