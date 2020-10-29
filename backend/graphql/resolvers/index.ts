@@ -26,7 +26,7 @@ module.exports = {
                 {Category: {$regex: args.searchSequence, $options: 'i'}}
             ]
             })
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -36,7 +36,7 @@ module.exports = {
         }
     },
 
-    dinner: async () =>{
+    dinner: async (args) =>{
         try{
             const recipes = await Recipes
             .find({$or:[
@@ -50,7 +50,7 @@ module.exports = {
                 {Category: "Lamb"},
                 {Category: "Goat"}
             ]})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -59,11 +59,11 @@ module.exports = {
             throw err;
         }
     },
-    dessert: async () =>{
+    dessert: async (args) =>{
         try{
             const recipes = await Recipes
             .find({Category: "Dessert"})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -72,11 +72,11 @@ module.exports = {
             throw err;
         }
     },
-    breakfast: async () =>{
+    breakfast: async (args) =>{
         try{
             const recipes = await Recipes
             .find({Category: "Breakfast"})
-            .sort({Name: 1})
+            .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }

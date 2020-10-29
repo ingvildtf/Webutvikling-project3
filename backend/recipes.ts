@@ -31,11 +31,7 @@ const RecipesSchema = new mongoose.Schema({
     },
     Review: {
         type: [Number],
-<<<<<<< HEAD
         required: false,
-=======
-        required: false 
->>>>>>> develop
     }
 },
 

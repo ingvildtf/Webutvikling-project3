@@ -24,10 +24,10 @@ module.exports = buildSchema(`
         
         type RootQuery{
             recipes(offset: Int, limit: Int): [Recipe!]!
-            searchRecipes(searchSequence: String!): [Recipe]
-            dinner: [Recipe!]!
-            dessert: [Recipe!]!
-            breakfast: [Recipe!]!
+            searchRecipes(searchSequence: String!, offset: Int, limit: Int): [Recipe]
+            dinner(offset: Int, limit: Int): [Recipe!]!
+            dessert(offset: Int, limit: Int): [Recipe!]!
+            breakfast(offset: Int, limit: Int): [Recipe!]!
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
