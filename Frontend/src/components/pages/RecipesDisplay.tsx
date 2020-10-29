@@ -2,9 +2,9 @@ import styled from 'styled-components'
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import { Modal } from '../modal'
-import { RecipeModal } from '../recipe-modal'
-import { useModal } from '../useModal'
+import { Modal } from '../modal/modal'
+import { RecipeModal } from '../modal/recipe-modal'
+import { useModal } from '../modal/useModal'
 import { useQuery } from '@apollo/client'
 import { GET_RECIPE_QUERY } from '../../queries'
 
