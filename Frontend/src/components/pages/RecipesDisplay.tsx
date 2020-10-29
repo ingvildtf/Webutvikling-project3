@@ -1,40 +1,19 @@
 import styled from 'styled-components'
 
-import React, { Component, FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
 import { Modal } from '../modal'
 import { RecipeModal } from '../recipe-modal'
 import { useModal } from '../useModal'
-import { isTemplateElement } from '@babel/types'
+import { useQuery } from '@apollo/client'
+import { GET_RECIPE_QUERY } from '../../queries'
 
 export const Wrapper = styled.div`
   margin-top: 10px;
-  display: grid;
-  align-items: stretch;
-  justify-items: end;
-  grid-template-rows: auto auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  height: 50vh;
-  grid-gap: 10px;
-  grid-template-areas: 'recipe recipe recipe recipe';
-
-  @media screen and (max-width: 1050px) {
-    grid-template-rows: repeat(5, min-content);
-    grid-template-columns: 1fr;
-    height: auto;
-    overflow: auto;
-    grid-template-areas:
-      'recipe'
-      'recipe';
-  }
-`
-const Button = styled.button`
-  padding: 2px 5px;
-  color: black;
-  height: 50px;
-  width: 60%;
-  cursor: pointer;
-  font-family: 'Source Sans Pro', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `
 interface RecipeCardProps {
   title?: string
@@ -44,6 +23,7 @@ interface RecipeCardProps {
 
 const RecipeCard = styled.div<RecipeCardProps>`
   width: 250px;
+
   border-radius: 4px;
   background-color: #f2f2f2;
   font-size: 14px;
@@ -71,71 +51,46 @@ const CardTitle = styled.div<RecipeCardProps>`
   padding-top: 20px;
   height: auto;
 `
-/* 
+
 const CardContent = styled.div<RecipeCardProps>`
   grid-area: description;
   padding: 5px;
   height: auto;
 `
- */
-const recipes = [
-  {
-    name: 'Pizzabolle',
-    content: [
-      {
-        imageUrl:
-          'https://brands-a.prod.onewp.net/app/uploads/sites/4/2018/09/Pizzaboller.jpg',
-        time: '1 hour',
-        description: 'Not healthy, but good as hell.',
-      },
-    ],
-  },
-  {
-    name: 'Tomatsuppe',
-    content: [
-      {
-        imageUrl:
-          'https://idagranjansen.com/wp-content/uploads/tomatsuppe__p2b6663.jpg',
-        time: '2 hours',
-        description: 'This is the perfect dish.',
-      },
-    ],
-  },
-]
 
 const RecipesDisplay: FunctionComponent = () => {
-  const { isShown, toggle } = useModal()
-  const onConfirm = () => toggle()
-  const onCancel = () => toggle()
+  const { isShown, openModal, closeModal } = useModal()
+  const [activeRecipe, setActiveRecipe] = useState()
+
+  useEffect(() => {
+    if (activeRecipe !== undefined) openModal()
+  }, [activeRecipe])
+
+  const { loading, error, data } = useQuery(GET_RECIPE_QUERY)
+  if (loading) return <CardContent>Loading...</CardContent>
+  if (error) return <CardContent>Error!</CardContent>
 
   return (
     <Wrapper>
-      <RecipeCard onClick={toggle}>
-        <CardImage src={recipes[0].content[0].imageUrl} />
-        <CardTitle>{recipes[0].name} </CardTitle>
-        {/*         <CardContent> {recipes[0].content[0].description}</CardContent>
-         */}{' '}
-      </RecipeCard>
-      <RecipeCard onClick={toggle}>
-        <CardImage src={recipes[0].content[0].imageUrl} />
-        <CardTitle>{recipes[0].name} </CardTitle>
-        {/*         <CardContent> {recipes[0].content[0].description}</CardContent>
-         */}{' '}
-      </RecipeCard>
-      <RecipeCard onClick={toggle}>
-        <CardImage src={recipes[1].content[1].imageUrl} />
-        <CardTitle>{recipes[1].name} </CardTitle>
-        {/*         <CardContent> {recipes[1].content[1].description}</CardContent>
-         */}{' '}
-      </RecipeCard>{' '}
-      <RecipeCard onClick={toggle}>
-        <CardImage src={recipes[0].content[0].imageUrl} />
-        <CardTitle>{recipes[0].name} </CardTitle>
-        {/*         <CardContent> {recipes[0].content[0].description}</CardContent>
-         */}{' '}
-      </RecipeCard>{' '}
-      <Button onClick={toggle}>Open this recipe (picture here)</Button>
-      <Modal isShown={isShown} hide={toggle} headerText="Pasta BoloNICE" />
+      {data.recipes.map((recipe: any) => (
+        <RecipeCard
+          onClick={() => {
+            setActiveRecipe(recipe)
+          }}
+        >
+          <CardImage src={recipe.Image} />
+          <CardTitle>{recipe.Name}</CardTitle>
+        </RecipeCard>
+      ))}
+      {activeRecipe && (
+        <Modal
+          isShown={isShown}
+          hide={closeModal}
+          modalContent={
+            <RecipeModal closeModal={closeModal} recipe={activeRecipe!} />
+          }
+        />
+      )}
     </Wrapper>
   )
 }
