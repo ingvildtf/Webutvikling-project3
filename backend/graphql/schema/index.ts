@@ -1,4 +1,4 @@
-const {buildSchema} = require('graphql'); 
+const { buildSchema } = require('graphql')
 
 module.exports = buildSchema(`
         type Recipe {
@@ -19,7 +19,7 @@ module.exports = buildSchema(`
             image: String
         }
         type RootQuery{
-            recipes: [Recipe!]!
+            recipes(offset: Int, limit: Int): [Recipe!]!
             searchRecipes(category: String!): Recipe
         }
         type RootMutation{
