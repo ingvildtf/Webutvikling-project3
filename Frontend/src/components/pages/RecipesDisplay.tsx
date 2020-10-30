@@ -16,6 +16,7 @@ import {
 } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
+import {addRating} from '../../actions/reviewAction'
 import { incrementPage } from '../../actions/pageActions'
 import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES } from '../../actions/types'
 import pageReducer from '../../reducers/pageReducer'
@@ -195,12 +196,18 @@ const RecipesDisplay: FunctionComponent = () => {
     })
   }
 
+  const activateRecipe = (recipe:any) => {
+    setActiveRecipe(recipe)
+    dispatch(addRating(recipe.ID))
+    console.log(typeof(recipe.ID))
+  }
+
   return (
     <Wrapper>
       {queryName(query).map((recipe: any) => (
         <RecipeCard
           onClick={() => {
-            setActiveRecipe(recipe)
+            activateRecipe(recipe)
           }}
           data-cy="recipeCard"
         >

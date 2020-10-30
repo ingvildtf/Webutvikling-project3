@@ -1,10 +1,13 @@
-import { ADD_REVIEW } from '../queries'
+import { ADD_REVIEW } from '../actions/types'
 
-export default function (state = '', action: any) {
+const initialState = {recipeID: '', reviews: []}
+
+export default function (state = initialState, action: any) {
   switch (action.type) {
     case ADD_REVIEW:
-      return {
-        state: action.payload,
+      return{
+        ...state,
+        recipeID: action.payload,
       }
     default:
       return state

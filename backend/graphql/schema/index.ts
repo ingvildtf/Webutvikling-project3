@@ -28,11 +28,14 @@ module.exports = buildSchema(`
             dinner(offset: Int, limit: Int): [Recipe!]!
             dessert(offset: Int, limit: Int): [Recipe!]!
             breakfast(offset: Int, limit: Int): [Recipe!]!
-            reviews(id: String!): [Recipe!]!
+            reviews(id: String!): Recipe
+        }
+        type Result{
+            result: Int
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
-            addReview(id: String!, star: Int!): Recipe
+            addReview(id: String!, star: Int): Result
         }
         schema {
             query: RootQuery

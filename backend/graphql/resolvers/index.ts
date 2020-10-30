@@ -85,6 +85,16 @@ module.exports = {
             throw err;
         }
     },
+    reviews: async args => {
+        try {
+          const recipe = await Recipes.find({ID: args.id})
+
+            return { ...recipe._doc, _id: recipe._doc._id.toString() }
+
+        } catch (err) {
+          throw err
+        }
+      },
 
     //Mutations
     //creates a new recipes 
@@ -120,15 +130,13 @@ module.exports = {
              throw err; 
          };
      },
-     review: async (args) => { 
+     addReview: async (args) => { 
          try{
          //need to return to get a valid result 
-         const result = await Recipes.find({ID: args.id})
-         .update({$push: {Review: args.star}})
-         
-             console.log(result);
+         await Recipes.find({ID: args.id})
+         .updateOne({$push: {Review: args.star}}) 
              //leaves out all the metadata, property delivered by mongoose 
-             return {result};
+              return args.star;
          }
          catch(err) {
              console.log(err);

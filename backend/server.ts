@@ -70,7 +70,8 @@ app.use(
   //
   rootValue: graphQlResolvers,
   graphiql: true
-  })
+  }), 
+  bodyParser
 );
 
   app.listen(3001, () => {

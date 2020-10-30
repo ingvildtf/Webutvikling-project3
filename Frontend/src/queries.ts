@@ -74,22 +74,16 @@ export const SEARCH_RECIPES = gql`
 `
 
 export const ADD_REVIEW = gql`
-  mutation AddReview($matchedString: String!, $addReview: Int!) {
-    review(id: $matchedString, star: $addReview) {
-      ID
-      Name
-      Category
-      Instruction
-      Ingredients
-      Image
-      Review
+  mutation AddReview($matchedString: String!, $addReview: Int) {
+    addReview(id: $matchedString, star: $addReview) {
+      result
     }
   }
 `
 
 export const GET_REVIEWS = gql`
-  mutation GetReview($matchedString: String!, $offset: Int) {
-    reviews(id: $matchedString, offset: $offset) {
+  query GetReview($matchedString: String!) {
+    reviews(id: $matchedString) {
       ID
       Name
       Category

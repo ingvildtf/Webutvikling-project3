@@ -1,6 +1,6 @@
 export const addRating = (id: string) => {
   return {
-    type: 'GET_REVIEWS',
+    type: 'ADD_REVIEW',
     payload: id,
   }
 }

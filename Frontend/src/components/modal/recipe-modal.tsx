@@ -30,9 +30,7 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
 }) => {
   const { Name, Ingredients, Instruction, Image } = recipe
   const [stars, setStars] = useState(0) //Tester
-  const activeRecipe = useSelector(
-    (state: RootStateOrAny) => state.reviewReducer
-  )
+  let recipeId: String = useSelector( (state: RootStateOrAny) => state.reviewReducer.recipeID)
   const dispatch = useDispatch()
 
   /*   const handleSubmit = () => {
@@ -61,19 +59,19 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
     },
   }) */
 
-  console.log(activeRecipe)
+  console.log(recipeId)
 
   const [addReview] = useMutation(ADD_REVIEW, {
     update(cache, { data: { addReview } }) {
       const { reviews } = cache.readQuery<any>({
         query: GET_REVIEWS,
         variables: {
-          id: activeRecipe,
+          id: recipeId,
         },
       })
       cache.writeQuery({
         query: GET_REVIEWS,
-        variables: { id: activeRecipe },
+        variables: { id: recipeId },
         data: { reviews: [...[addReview], ...reviews] },
       })
     },
@@ -83,11 +81,11 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
     setStars(value)
     addReview({
       variables: {
-        matchedString: activeRecipe,
-        addReview: stars,
+        matchedString: recipeId,
+        addReview: value,
       },
     })
-    setStars(0)
+    console.log(value)
   }
 
   return (
