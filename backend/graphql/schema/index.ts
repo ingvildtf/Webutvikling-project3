@@ -1,6 +1,6 @@
 const { buildSchema } = require('graphql')
 
-//GraphQL schema, with similar fields as in the database 
+//GraphQL schema, with similar fields as in the database
 
 module.exports = buildSchema(`
         type Recipe {
@@ -28,10 +28,11 @@ module.exports = buildSchema(`
             dinner(offset: Int, limit: Int): [Recipe!]!
             dessert(offset: Int, limit: Int): [Recipe!]!
             breakfast(offset: Int, limit: Int): [Recipe!]!
+            reviews(id: String!): [Recipe!]!
         }
         type RootMutation{
             createRecipe(recipeInput: RecipeInput): Recipe 
-            review(id: String!, star: Int!): Recipe
+            addReview(id: String!, star: Int!): Recipe
         }
         schema {
             query: RootQuery

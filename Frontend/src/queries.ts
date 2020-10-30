@@ -88,7 +88,7 @@ export const ADD_REVIEW = gql`
 `
 
 export const GET_REVIEWS = gql`
-  mutation AddReview($matchedString: String!, $offset: Int) {
+  mutation GetReview($matchedString: String!, $offset: Int) {
     reviews(id: $matchedString, offset: $offset) {
       ID
       Name

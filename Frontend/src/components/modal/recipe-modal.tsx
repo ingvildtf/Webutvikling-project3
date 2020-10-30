@@ -8,6 +8,9 @@ import {
   Rating,
 } from './modal.style'
 import BeautyStars from 'beauty-stars'
+import { ADD_REVIEW, GET_REVIEWS } from '../../queries'
+import { useMutation } from '@apollo/client'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 
 interface ConfirmationModalProps {
   closeModal: () => void
@@ -25,8 +28,68 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
   recipe,
   closeModal,
 }) => {
-  const { Name, Ingredients, Instruction, Image, Review } = recipe
+  const { Name, Ingredients, Instruction, Image } = recipe
   const [stars, setStars] = useState(0) //Tester
+  const activeRecipe = useSelector(
+    (state: RootStateOrAny) => state.reviewReducer
+  )
+  const dispatch = useDispatch()
+
+  /*   const handleSubmit = () => {
+    dispatch(
+      addReview({
+        variables: {
+          matchedString: activeRecipe,
+          addReview: stars,
+        },
+      })
+    )
+    setStars(0)
+  } */
+  /*   const [addReview] = useMutation(ADD_REVIEW, {
+    update(cache, { data: { addReview } }) {
+      //this updates the review chahe with the new review from ADD_REVIEW
+      const { review } = cache.readQuery({
+        query: GET_REVIEWS,
+        variables: { id: activeRecipe },
+      })
+      cache.writeQuery({
+        query: GET_REVIEWS,
+        variables: { id: activeRecipe, star: stars },
+        data: { review: [...[addReview], ...review] },
+      })
+    },
+  }) */
+
+  console.log(activeRecipe)
+
+  const [addReview] = useMutation(ADD_REVIEW, {
+    update(cache, { data: { addReview } }) {
+      const { reviews } = cache.readQuery<any>({
+        query: GET_REVIEWS,
+        variables: {
+          id: activeRecipe,
+        },
+      })
+      cache.writeQuery({
+        query: GET_REVIEWS,
+        variables: { id: activeRecipe },
+        data: { reviews: [...[addReview], ...reviews] },
+      })
+    },
+  })
+
+  const updateReview = (value: number) => {
+    setStars(value)
+    addReview({
+      variables: {
+        matchedString: activeRecipe,
+        addReview: stars,
+      },
+    })
+    setStars(0)
+  }
+
   return (
     <React.Fragment>
       <Header>
@@ -39,7 +102,7 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
           inactiveColor={'#DDE2DC'}
           activeColor={'#607878'}
           value={stars}
-          onChange={value => setStars(value)}
+          onChange={value => updateReview(value)}
         />
       </Rating>
       <Content>{Ingredients}</Content>

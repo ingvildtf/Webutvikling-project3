@@ -12,6 +12,7 @@ import {
   GET_DINNER_RECIPES,
   GET_BREAKFAST_RECIPES,
   GET_DESSERT_RECIPES,
+  GET_REVIEWS,
 } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
@@ -47,6 +48,10 @@ const RecipeCard = styled.div<RecipeCardProps>`
     'img'
     'title'
     'rating';
+
+  :hover {
+    cursor: pointer;
+  }
   @media screen and (max-width: 800px) {
     width: 42vw;
     margin-top: 4vw;
@@ -109,7 +114,6 @@ const RecipesDisplay: FunctionComponent = () => {
   const pageNumber = useSelector(
     (state: RootStateOrAny) => state.pageReducer.pageNumber
   )
-  console.log(pageOffset, pageSize, pageNumber)
   const dispatch = useDispatch()
   /* const pageSize = 15
   const [pageOffset, setPageOffset] = useState(0)
@@ -140,7 +144,6 @@ const RecipesDisplay: FunctionComponent = () => {
   if (error) return <CardRatingWrapper>Error!</CardRatingWrapper>
 
   const fetchMoreRecipes = () => {
-    console.log(pageSize, pageOffset, pageNumber)
     fetchMore({
       variables: {
         offset: pageSize * pageNumber,
@@ -190,7 +193,6 @@ const RecipesDisplay: FunctionComponent = () => {
         })*/
       },
     })
-    console.log(pageSize, pageOffset, pageNumber)
   }
 
   return (
@@ -205,7 +207,18 @@ const RecipesDisplay: FunctionComponent = () => {
           <CardImage src={recipe.Image} />
           <CardTitle className="cardTitle">{recipe.Name}</CardTitle>
           <CardRatingWrapper>
-            <BeautyStars inactiveColor={'#DDE2DC'} activeColor={'#607878'} />
+            <BeautyStars
+              size={26}
+              value={
+                recipe.Review.reduce(
+                  (previousValue: number, currentValue: number) =>
+                    previousValue + currentValue,
+                  0
+                ) / recipe.Review.length
+              }
+              inactiveColor={'#DDE2DC'}
+              activeColor={'#607878'}
+            />
           </CardRatingWrapper>
         </RecipeCard>
       ))}
