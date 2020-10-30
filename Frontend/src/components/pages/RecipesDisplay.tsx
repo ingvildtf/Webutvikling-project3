@@ -24,10 +24,10 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = styled.div<RecipeCardProps>`
-  width: 250px;
-
+  width: 25vw;
+  margin: 2vw 0.5vw 0 0;
   border-radius: 4px;
-  background-color: #f2f2f2;
+  background-color: #eff1ee;
   font-size: 14px;
   text-align: center;
   display: grid;
@@ -36,7 +36,20 @@ const RecipeCard = styled.div<RecipeCardProps>`
   grid-template-areas:
     'img'
     'title';
+  @media screen and (max-width: 800px) {
+    width: 42vw;
+    margin-top: 4vw;
+    align-content: center;
+    justify-content: space-between;
+  }
+  @media screen and (max-width: 500px) {
+    width: 90vw;
+    margin-top: 4vw;
+    align-content: center;
+    justify-content: space-between;
+  }
 `
+
 const CardImage = styled.img`
   grid-area: img;
   display: flex;
@@ -50,8 +63,11 @@ const CardImage = styled.img`
 const CardTitle = styled.div<RecipeCardProps>`
   grid-area: title;
   font-size: 18px;
-  padding-top: 20px;
-  height: auto;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1vw 0 1vw;
 `
 
 const CardContent = styled.div<RecipeCardProps>`
@@ -100,16 +116,15 @@ const RecipesDisplay: FunctionComponent = () => {
   return (
     <Wrapper>
       {data.recipes.map((recipe: any) => (
-       <div data-cy="recipeCard">
-          <RecipeCard 
+        <RecipeCard
           onClick={() => {
             setActiveRecipe(recipe)
-          }} 
+          }}
+          data-cy="recipeCard"
         >
           <CardImage src={recipe.Image} />
           <CardTitle className="cardTitle">{recipe.Name}</CardTitle>
-        </RecipeCard> 
-        </div>
+        </RecipeCard>
       ))}
       <BottomScrollListener onBottom={fetchMoreRecipes} />
       {activeRecipe && (

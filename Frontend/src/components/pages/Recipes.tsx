@@ -10,8 +10,8 @@ export const Wrapper = styled.div`
   background: white;
   align-content: space-between;
   justify-content: space-between;
-  grid-template-rows: min-content min-content min-content;
-  grid-template-columns: auto repeat(3, 1fr);
+  grid-template-rows: min-content min-content;
+  grid-template-columns: auto repeat(4, auto);
   grid-gap: 5px 0px;
   grid-template-areas:
     'search     search  search  button'
@@ -33,7 +33,7 @@ export const Wrapper = styled.div`
 /**** BUTTON AREA ****/
 const Button = styled.button`
   grid-area: button;
-  color: #f2f2f2;
+  color: white;
   background-color: #607878;
   height: 50px;
   width: 12vw;
@@ -54,7 +54,8 @@ const SearchBar = styled.input`
   font-size: 17px;
   font-family: 'Source Sans Pro', sans-serif;
   border: 1px solid transparent;
-  border-bottom: 1px solid #afc9be;
+  color: #afc9be;
+  border-bottom: 1px solid #607878;
 
   &:focus {
     outline: none;
@@ -86,9 +87,11 @@ const Recipes: FunctionComponent = () => {
   return (
     <React.Fragment>
       <Wrapper>
-       <div data-cy="searchBar">
-        <SearchBar type="search" placeholder="Hva har du lyst på i dag?" />
-        </div>
+        <SearchBar
+          type="search"
+          placeholder="Hva har du lyst på i dag?"
+          data-cy="searchBar"
+        />
         <ButtonArea>
           <Button type="submit">SØK</Button>
         </ButtonArea>
