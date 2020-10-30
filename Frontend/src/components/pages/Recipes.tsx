@@ -1,6 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import RecipesDisplay from './RecipesDisplay'
+import {useSelector, useDispatch, AnyIfEmpty, RootStateOrAny} from 'react-redux'
+import {fetchAllRecipes, fetchDinnerRecipes, fetchBreakfastRecipes, fetchDessertRecipes} from '../../actions/productActions'
+import {resetPage} from '../../actions/pageActions'
 
 //https://nainacodes.com/blog/create-an-
 
@@ -84,14 +87,51 @@ const Recipe = styled.div`
 
 const Recipes: FunctionComponent = () => {
   //https://www.youtube.com/watch?v=TWODzlTeZUM
+  //const search = useSelector((state:RootStateOrAny) => state.recipeReducer.search)
+  let search = ""; 
+  const dispatch = useDispatch(); 
+
+  const filteredByInput = (e: React.KeyboardEvent) => {
+    if(e.key.length < 2){
+      search += e.key;
+    }
+    if(e.key == "Backspace"){
+      let word = search
+      search = ""
+      for(let i = 0; i < word.length-1; i ++){
+        search += word.charAt(i)
+      }
+    }
+  }
+
+  const onClick = (action:any) => {
+    switch (action) {
+      case 'dinner':
+        dispatch(resetPage());
+        dispatch(fetchDinnerRecipes());
+        return 
+      case 'breakfast':
+        dispatch(resetPage());
+        dispatch(fetchBreakfastRecipes());
+        return 
+      case 'dessert':
+        dispatch(resetPage());
+        dispatch(fetchDessertRecipes());
+        return 
+      case 'allRecipes':
+        dispatch(resetPage());
+        dispatch(fetchAllRecipes());
+        return 
+      default:
+        return 
+    }
+  }
+
   return (
     <React.Fragment>
       <Wrapper>
-        <SearchBar
-          type="search"
-          placeholder="Hva har du lyst på i dag?"
-          data-cy="searchBar"
-        />
+        <SearchBar type='text' onKeyDown={(e)=> {filteredByInput(e)}} placeholder="Hva har du lyst på i dag?"  data-cy="searchBar"/>
+
         <ButtonArea>
           <Button type="submit">SØK</Button>
         </ButtonArea>
@@ -99,14 +139,14 @@ const Recipes: FunctionComponent = () => {
         <Categories>
           <h2>Kategorier</h2>
 
-          <CheckBox type="checkbox"></CheckBox>
-          <label> Frokost</label>
+          <CheckBox type="checkbox" onClick={ ()=> onClick('dinner')}></CheckBox>
+          <label> Dinner</label>
           <br></br>
-          <CheckBox type="checkbox"></CheckBox>
-          <label> Lunsj</label>
+          <CheckBox type="checkbox" onClick={() => onClick('breakfast')}></CheckBox>
+          <label> Breakfast</label>
           <br></br>
-          <CheckBox type="checkbox"></CheckBox>
-          <label> Frokost</label>
+          <CheckBox type="checkbox" onClick={() => onClick('dessert')}></CheckBox>
+          <label> Dessert </label>
           <br></br>
         </Categories>
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { filterRecipes } from '../actions/productActions'
+//import { filterRecipes } from '../actions/productActions'
 
-const Select = styled.select`
+/*const Select = styled.select`
   border: 1px solid red;
 `
 
@@ -27,4 +27,4 @@ const mapStateToProps = (state: any) => ({
   sort: state.recipes.sort,
 })
 
-export default connect(mapStateToProps, { filterRecipes })(Filter)
+export default connect(mapStateToProps, { filterRecipes })(Filter)*/
