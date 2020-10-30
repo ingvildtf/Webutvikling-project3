@@ -6,12 +6,10 @@ import { Modal } from '../modal/modal'
 import { RecipeModal } from '../modal/recipe-modal'
 import { useModal } from '../modal/useModal'
 import { useQuery } from '@apollo/client'
-import { GET_RECIPE_QUERY, GET_DINNER_RECIPES, GET_BREAKFAST_RECIPES, GET_DESSERT_RECIPES } from '../../queries'
+import { GET_RECIPE_QUERY, GET_DINNER_RECIPES, GET_BREAKFAST_RECIPES, GET_DESSERT_RECIPES, SEARCH_RECIPES } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux'
 import {incrementPage} from '../../actions/pageActions'
-import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES } from '../../actions/types'
-import pageReducer from '../../reducers/pageReducer'
 
 export const Wrapper = styled.div`
   margin-top: 10px;
@@ -90,20 +88,23 @@ const RecipesDisplay: FunctionComponent = () => {
 
   
   const query = useSelector((state: RootStateOrAny) => state.recipesReducer.query);
+  const searchField: String = useSelector((state: RootStateOrAny) => state.recipesReducer.search)
   const pageOffset = useSelector((state: RootStateOrAny) => state.pageReducer.pageOffset);
   const pageSize = useSelector((state: RootStateOrAny) => state.pageReducer.pageSize);
   const pageNumber = useSelector((state: RootStateOrAny) => state.pageReducer.pageNumber);
-  console.log(pageOffset, pageSize, pageNumber)
   const dispatch = useDispatch(); 
  /* const pageSize = 15
   const [pageOffset, setPageOffset] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)*/
+console.log(searchField)
 
   const { loading, error, data, fetchMore } = useQuery(query, {
     variables: {
+      matchedString: searchField,
       offset: pageOffset,
     },
   })
+  
 
   const queryName = (query:any) => {
     switch (query) {
@@ -115,18 +116,21 @@ const RecipesDisplay: FunctionComponent = () => {
         return Object(data.breakfast)
       case GET_DESSERT_RECIPES:
         return Object(data.dessert)
+      case SEARCH_RECIPES:
+        return Object(data.searchRecipes)
       default:
         return Object(data.recipes)
     }
   }
-
+  console.log(queryName)
   if (loading) return <CardContent>Loading...</CardContent>
   if (error) return <CardContent>Error!</CardContent>
 
   const fetchMoreRecipes = () => {
     console.log(pageSize, pageOffset, pageNumber);
     fetchMore({
-      variables: {      
+      variables: { 
+        matchedString: searchField,     
         offset: pageSize * pageNumber,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -155,6 +159,11 @@ const RecipesDisplay: FunctionComponent = () => {
             dispatch(incrementPage());
             return Object.assign({}, prev, {
               breakfast: [...prev.breakfast, ...fetchMoreResult.breakfast],
+            })
+          case SEARCH_RECIPES:
+            dispatch(incrementPage());
+            return Object.assign({}, prev, {
+              searchRecipes: [...prev.searchRecipes, ...fetchMoreResult.searchRecipes],
             })
           default:
             dispatch(incrementPage());

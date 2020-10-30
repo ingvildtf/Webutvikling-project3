@@ -21,14 +21,10 @@ module.exports = {
         try{
             const recipes = await Recipes
             //finds recipes from database that includes the search word 
-            .find({$or: [
-               {Name: {$regex: args.searchSequence, $options: 'i'}}, 
-                {Category: {$regex: args.searchSequence, $options: 'i'}}
-            ]
-            })
+            .find({Name: {$regex: args.searchSequence, $options: 'i'}},)
             .sort({Name: 1}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
-            return {...recipe._doc, _id: recipe._doc._id.toString()
+                return {...recipe._doc, _id: recipe._doc._id.toString()
             }
             })
         } catch (err){
