@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import BeautyStars from 'beauty-stars'
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
@@ -6,10 +7,20 @@ import { Modal } from '../modal/modal'
 import { RecipeModal } from '../modal/recipe-modal'
 import { useModal } from '../modal/useModal'
 import { useQuery } from '@apollo/client'
-import { GET_RECIPE_QUERY, GET_DINNER_RECIPES, GET_BREAKFAST_RECIPES, GET_DESSERT_RECIPES, SEARCH_RECIPES } from '../../queries'
+import {
+  GET_RECIPE_QUERY,
+  GET_DINNER_RECIPES,
+  GET_BREAKFAST_RECIPES,
+  GET_DESSERT_RECIPES,
+  GET_REVIEWS,
+  SEARCH_RECIPES ,
+} from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
-import {RootStateOrAny, useSelector, useDispatch} from 'react-redux'
-import {incrementPage} from '../../actions/pageActions'
+import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
+import {addRating} from '../../actions/reviewAction'
+import { incrementPage } from '../../actions/pageActions'
+import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES } from '../../actions/types'
+import pageReducer from '../../reducers/pageReducer'
 
 export const Wrapper = styled.div`
   margin-top: 10px;
@@ -26,7 +37,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = styled.div<RecipeCardProps>`
-  width: 25vw;
+  width: 23vw;
   margin: 2vw 0.5vw 0 0;
   border-radius: 4px;
   background-color: #eff1ee;
@@ -34,10 +45,15 @@ const RecipeCard = styled.div<RecipeCardProps>`
   text-align: center;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: min-content min-content;
+  grid-template-rows: min-content min-content min-content;
   grid-template-areas:
     'img'
-    'title';
+    'title'
+    'rating';
+
+  :hover {
+    cursor: pointer;
+  }
   @media screen and (max-width: 800px) {
     width: 42vw;
     margin-top: 4vw;
@@ -65,17 +81,19 @@ const CardImage = styled.img`
 const CardTitle = styled.div<RecipeCardProps>`
   grid-area: title;
   font-size: 18px;
-  height: 100px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 1vw 0 1vw;
 `
 
-const CardContent = styled.div<RecipeCardProps>`
-  grid-area: description;
-  padding: 5px;
-  height: auto;
+const CardRatingWrapper = styled.div<RecipeCardProps>`
+  grid-area: rating;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1vw 1vw 1vw;
 `
 
 const RecipesDisplay: FunctionComponent = () => {
@@ -86,15 +104,22 @@ const RecipesDisplay: FunctionComponent = () => {
     if (activeRecipe !== undefined) openModal()
   }, [activeRecipe])
 
-  
-  const query = useSelector((state: RootStateOrAny) => state.recipesReducer.query);
+  const query = useSelector(
+    (state: RootStateOrAny) => state.recipesReducer.query
+  )
   const sortDecending: Boolean = useSelector((state: RootStateOrAny) => state.recipesReducer.sortDecending)
   const searchField: String = useSelector((state: RootStateOrAny) => state.recipesReducer.search)
-  const pageOffset = useSelector((state: RootStateOrAny) => state.pageReducer.pageOffset);
-  const pageSize = useSelector((state: RootStateOrAny) => state.pageReducer.pageSize);
-  const pageNumber = useSelector((state: RootStateOrAny) => state.pageReducer.pageNumber);
-  const dispatch = useDispatch(); 
- /* const pageSize = 15
+  const pageOffset = useSelector(
+    (state: RootStateOrAny) => state.pageReducer.pageOffset
+  )
+  const pageSize = useSelector(
+    (state: RootStateOrAny) => state.pageReducer.pageSize
+  )
+  const pageNumber = useSelector(
+    (state: RootStateOrAny) => state.pageReducer.pageNumber
+  )
+  const dispatch = useDispatch()
+  /* const pageSize = 15
   const [pageOffset, setPageOffset] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)*/
 console.log(searchField)
@@ -108,7 +133,7 @@ console.log(searchField)
   })
   
 
-  const queryName = (query:any) => {
+  const queryName = (query: any) => {
     switch (query) {
       case GET_RECIPE_QUERY:
         return Object(data.recipes)
@@ -124,12 +149,11 @@ console.log(searchField)
         return Object(data.recipes)
     }
   }
-  console.log(queryName)
-  if (loading) return <CardContent>Loading...</CardContent>
-  if (error) return <CardContent>Error!</CardContent>
+
+  if (loading) return <CardRatingWrapper>Loading...</CardRatingWrapper>
+  if (error) return <CardRatingWrapper>Error!</CardRatingWrapper>
 
   const fetchMoreRecipes = () => {
-    console.log(pageSize, pageOffset, pageNumber);
     fetchMore({
       variables: { 
         matchedString: searchField,     
@@ -137,29 +161,29 @@ console.log(searchField)
         sortDecending: sortDecending ? -1 : 1
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        switch(query){
-          case!fetchMoreResult: 
-            dispatch(incrementPage());
-           return prev
+        switch (query) {
+          case !fetchMoreResult:
+            dispatch(incrementPage())
+            return prev
           case GET_RECIPE_QUERY:
-            dispatch(incrementPage());
-             return Object.assign({}, prev, {
+            dispatch(incrementPage())
+            return Object.assign({}, prev, {
               recipes: [...prev.recipes, ...fetchMoreResult.recipes],
             })
           case GET_DINNER_RECIPES:
-            dispatch(incrementPage());
-           /* setPageOffset(pageOffset + pageSize)
+            dispatch(incrementPage())
+            /* setPageOffset(pageOffset + pageSize)
             setPageNumber(pageNumber + 1)*/
             return Object.assign({}, prev, {
               dinner: [...prev.dinner, ...fetchMoreResult.dinner],
             })
           case GET_DESSERT_RECIPES:
-            dispatch(incrementPage());
+            dispatch(incrementPage())
             return Object.assign({}, prev, {
               dessert: [...prev.dessert, ...fetchMoreResult.dessert],
             })
           case GET_BREAKFAST_RECIPES:
-            dispatch(incrementPage());
+            dispatch(incrementPage())
             return Object.assign({}, prev, {
               breakfast: [...prev.breakfast, ...fetchMoreResult.breakfast],
             })
@@ -169,14 +193,14 @@ console.log(searchField)
               searchRecipes: [...prev.searchRecipes, ...fetchMoreResult.searchRecipes],
             })
           default:
-            dispatch(incrementPage());
-           /* setPageOffset(pageOffset + pageSize)
+            dispatch(incrementPage())
+            /* setPageOffset(pageOffset + pageSize)
             setPageNumber(pageNumber + 1)*/
             return Object.assign({}, prev, {
               recipes: [...prev.recipes, ...fetchMoreResult.recipes],
             })
         }
-      
+
         /*if (!fetchMoreResult) return prev
         setPageOffset(pageOffset + pageSize)
         setPageNumber(pageNumber + 1)
@@ -186,7 +210,12 @@ console.log(searchField)
         })*/
       },
     })
-    console.log(pageSize, pageOffset, pageNumber);
+  }
+
+  const activateRecipe = (recipe:any) => {
+    setActiveRecipe(recipe)
+    dispatch(addRating(recipe.ID))
+    console.log(typeof(recipe.ID))
   }
 
   return (
@@ -194,12 +223,26 @@ console.log(searchField)
       {queryName(query).map((recipe: any) => (
         <RecipeCard
           onClick={() => {
-            setActiveRecipe(recipe)
+            activateRecipe(recipe)
           }}
           data-cy="recipeCard"
         >
           <CardImage src={recipe.Image} />
           <CardTitle className="cardTitle">{recipe.Name}</CardTitle>
+          <CardRatingWrapper>
+            <BeautyStars
+              size={26}
+              value={
+                recipe.Review.reduce(
+                  (previousValue: number, currentValue: number) =>
+                    previousValue + currentValue,
+                  0
+                ) / recipe.Review.length
+              }
+              inactiveColor={'#DDE2DC'}
+              activeColor={'#607878'}
+            />
+          </CardRatingWrapper>
         </RecipeCard>
       ))}
       <BottomScrollListener onBottom={fetchMoreRecipes} />
