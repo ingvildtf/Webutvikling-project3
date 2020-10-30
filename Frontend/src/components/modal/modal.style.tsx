@@ -11,12 +11,14 @@ export const WrapperModal = styled.div`
   // height: 60vh;
   background-color: #f2f2f2;
   border: 1px solid #607878;
+  overflow: auto;
 
   display: grid;
   grid-template-rows: min-content min-content auto;
   grid-template-columns: min-content auto;
   grid-template-areas:
     'title  title'
+    'img    rating'
     'img    cont'
     'recipe recipe';
 
@@ -29,6 +31,7 @@ export const WrapperModal = styled.div`
     grid-template-areas:
       'title'
       'img'
+      'rating'
       'cont'
       'recipe';
   }
@@ -95,4 +98,11 @@ export const Recipe = styled.div`
   background-color: #f2f2f2;
   color: black;
   overflow: auto;
+`
+export const Rating = styled.div`
+  grid-area: rating;
+  padding: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `

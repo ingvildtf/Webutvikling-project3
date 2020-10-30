@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import BeautyStars from 'beauty-stars'
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
 
@@ -24,7 +25,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = styled.div<RecipeCardProps>`
-  width: 25vw;
+  width: 23vw;
   margin: 2vw 0.5vw 0 0;
   border-radius: 4px;
   background-color: #eff1ee;
@@ -32,10 +33,11 @@ const RecipeCard = styled.div<RecipeCardProps>`
   text-align: center;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: min-content min-content;
+  grid-template-rows: min-content min-content min-content;
   grid-template-areas:
     'img'
-    'title';
+    'title'
+    'rating';
   @media screen and (max-width: 800px) {
     width: 42vw;
     margin-top: 4vw;
@@ -63,17 +65,19 @@ const CardImage = styled.img`
 const CardTitle = styled.div<RecipeCardProps>`
   grid-area: title;
   font-size: 18px;
-  height: 100px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 1vw 0 1vw;
 `
 
-const CardContent = styled.div<RecipeCardProps>`
-  grid-area: description;
-  padding: 5px;
-  height: auto;
+const CardRatingWrapper = styled.div<RecipeCardProps>`
+  grid-area: rating;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1vw 1vw 1vw;
 `
 
 const RecipesDisplay: FunctionComponent = () => {
@@ -94,8 +98,8 @@ const RecipesDisplay: FunctionComponent = () => {
     },
   })
 
-  if (loading) return <CardContent>Loading...</CardContent>
-  if (error) return <CardContent>Error!</CardContent>
+  if (loading) return <CardRatingWrapper>Loading...</CardRatingWrapper>
+  if (error) return <CardRatingWrapper>Error!</CardRatingWrapper>
 
   const fetchMoreRecipes = () => {
     fetchMore({
@@ -124,6 +128,9 @@ const RecipesDisplay: FunctionComponent = () => {
         >
           <CardImage src={recipe.Image} />
           <CardTitle className="cardTitle">{recipe.Name}</CardTitle>
+          <CardRatingWrapper>
+            <BeautyStars inactiveColor={'#DDE2DC'} activeColor={'#607878'} />
+          </CardRatingWrapper>
         </RecipeCard>
       ))}
       <BottomScrollListener onBottom={fetchMoreRecipes} />

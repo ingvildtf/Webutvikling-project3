@@ -15,6 +15,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.4",
     "apollo-link-context": "^1.0.20",
+    "beauty-stars": "^1.1.0",
     "bootstrap": "^4.5.3",
     "graphql": "^15.4.0",
     "materialize-css": "^1.0.0-rc.2",
