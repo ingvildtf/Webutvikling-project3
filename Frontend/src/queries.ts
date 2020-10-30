@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+
+
 export const GET_RECIPE_QUERY = gql`
   query Recipes($offset: Int, $limit: Int) {
     recipes(limit: $limit, offset: $offset) {
@@ -42,7 +44,7 @@ export const GET_DESSERT_RECIPES = gql`
 
 export const GET_BREAKFAST_RECIPES = gql`
   query Breakfasts($offset: Int, $limit: Int) {
-    breackfast(limit: $limit, offset: $offset) {
+    breakfast(limit: $limit, offset: $offset) {
       ID
       Name
       Category

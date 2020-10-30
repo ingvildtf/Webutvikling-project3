@@ -6,8 +6,12 @@ import { Modal } from '../modal/modal'
 import { RecipeModal } from '../modal/recipe-modal'
 import { useModal } from '../modal/useModal'
 import { useQuery } from '@apollo/client'
-import { GET_RECIPE_QUERY } from '../../queries'
+import { GET_RECIPE_QUERY, GET_DINNER_RECIPES, GET_BREAKFAST_RECIPES, GET_DESSERT_RECIPES } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
+import {RootStateOrAny, useSelector, useDispatch} from 'react-redux'
+import {incrementPage} from '../../actions/pageActions'
+import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES } from '../../actions/types'
+import pageReducer from '../../reducers/pageReducer'
 
 export const Wrapper = styled.div`
   margin-top: 10px;
@@ -67,38 +71,98 @@ const RecipesDisplay: FunctionComponent = () => {
     if (activeRecipe !== undefined) openModal()
   }, [activeRecipe])
 
-  const pageSize = 15
+  
+  const query = useSelector((state: RootStateOrAny) => state.recipesReducer.query);
+  const pageOffset = useSelector((state: RootStateOrAny) => state.pageReducer.pageOffset);
+  const pageSize = useSelector((state: RootStateOrAny) => state.pageReducer.pageSize);
+  const pageNumber = useSelector((state: RootStateOrAny) => state.pageReducer.pageNumber);
+  console.log(pageOffset, pageSize, pageNumber)
+  const dispatch = useDispatch(); 
+ /* const pageSize = 15
   const [pageOffset, setPageOffset] = useState(0)
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, setPageNumber] = useState(1)*/
 
-  const { loading, error, data, fetchMore } = useQuery(GET_RECIPE_QUERY, {
+  const { loading, error, data, fetchMore } = useQuery(query, {
     variables: {
       offset: pageOffset,
     },
   })
 
+  const queryName = (query:any) => {
+    switch (query) {
+      case GET_RECIPE_QUERY:
+        return Object(data.recipes)
+      case GET_DINNER_RECIPES:
+        return Object(data.dinner)
+      case GET_BREAKFAST_RECIPES:
+        return Object(data.breakfast)
+      case GET_DESSERT_RECIPES:
+        return Object(data.dessert)
+      default:
+        return Object(data.recipes)
+    }
+  }
+
   if (loading) return <CardContent>Loading...</CardContent>
   if (error) return <CardContent>Error!</CardContent>
 
   const fetchMoreRecipes = () => {
+    console.log(pageSize, pageOffset, pageNumber);
     fetchMore({
-      variables: {
+      variables: {      
         offset: pageSize * pageNumber,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev
+        switch(query){
+          case!fetchMoreResult: 
+            dispatch(incrementPage());
+           return prev
+          case GET_RECIPE_QUERY:
+            dispatch(incrementPage());
+             return Object.assign({}, prev, {
+              recipes: [...prev.recipes, ...fetchMoreResult.recipes],
+            })
+          case GET_DINNER_RECIPES:
+            dispatch(incrementPage());
+           /* setPageOffset(pageOffset + pageSize)
+            setPageNumber(pageNumber + 1)*/
+            return Object.assign({}, prev, {
+              dinner: [...prev.dinner, ...fetchMoreResult.dinner],
+            })
+          case GET_DESSERT_RECIPES:
+            dispatch(incrementPage());
+            return Object.assign({}, prev, {
+              dessert: [...prev.dessert, ...fetchMoreResult.dessert],
+            })
+          case GET_BREAKFAST_RECIPES:
+            dispatch(incrementPage());
+            return Object.assign({}, prev, {
+              breakfast: [...prev.breakfast, ...fetchMoreResult.breakfast],
+            })
+          default:
+            dispatch(incrementPage());
+           /* setPageOffset(pageOffset + pageSize)
+            setPageNumber(pageNumber + 1)*/
+            return Object.assign({}, prev, {
+              recipes: [...prev.recipes, ...fetchMoreResult.recipes],
+            })
+        }
+      
+        /*if (!fetchMoreResult) return prev
         setPageOffset(pageOffset + pageSize)
         setPageNumber(pageNumber + 1)
+        
         return Object.assign({}, prev, {
-          recipes: [...prev.recipes, ...fetchMoreResult.recipes],
-        })
+          dinner: [...prev.dinner, ...fetchMoreResult.dinner],
+        })*/
       },
     })
+    console.log(pageSize, pageOffset, pageNumber);
   }
 
   return (
     <Wrapper>
-      {data.recipes.map((recipe: any) => (
+      {queryName(query).map((recipe: any) => (
         <RecipeCard
           onClick={() => {
             setActiveRecipe(recipe)

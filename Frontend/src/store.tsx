@@ -9,7 +9,7 @@ import rootReducer from './reducers'
 /* const store = createStore(reducer)
  */
 
-const initialState = {}
-const store = createStore(rootReducer, initialState, applyMiddleware())
+//const initialState = {}  , initialState
+const store = createStore(rootReducer, applyMiddleware())
 
 export default store
