@@ -10,6 +10,8 @@ import './index.css'
 
 /* const store = createStore(reducer)
  */
+
+//Provider connects our global state in the store to our application, so our whole application have acces to the store 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
