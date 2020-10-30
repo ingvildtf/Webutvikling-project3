@@ -20,6 +20,7 @@ interface RecipeCardProps {
   title?: string
   content?: string
   image?: string
+  className?: string
 }
 
 const RecipeCard = styled.div<RecipeCardProps>`
@@ -99,14 +100,16 @@ const RecipesDisplay: FunctionComponent = () => {
   return (
     <Wrapper>
       {data.recipes.map((recipe: any) => (
-        <RecipeCard
+       <div data-cy="recipeCard">
+          <RecipeCard 
           onClick={() => {
             setActiveRecipe(recipe)
-          }}
+          }} 
         >
           <CardImage src={recipe.Image} />
-          <CardTitle>{recipe.Name}</CardTitle>
-        </RecipeCard>
+          <CardTitle className="cardTitle">{recipe.Name}</CardTitle>
+        </RecipeCard> 
+        </div>
       ))}
       <BottomScrollListener onBottom={fetchMoreRecipes} />
       {activeRecipe && (

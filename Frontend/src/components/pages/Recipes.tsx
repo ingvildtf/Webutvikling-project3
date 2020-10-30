@@ -86,8 +86,9 @@ const Recipes: FunctionComponent = () => {
   return (
     <React.Fragment>
       <Wrapper>
+       <div data-cy="searchBar">
         <SearchBar type="search" placeholder="Hva har du lyst på i dag?" />
-
+        </div>
         <ButtonArea>
           <Button type="submit">SØK</Button>
         </ButtonArea>
