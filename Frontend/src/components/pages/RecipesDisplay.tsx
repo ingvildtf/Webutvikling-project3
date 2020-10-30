@@ -88,6 +88,7 @@ const RecipesDisplay: FunctionComponent = () => {
 
   
   const query = useSelector((state: RootStateOrAny) => state.recipesReducer.query);
+  const sortDecending: Boolean = useSelector((state: RootStateOrAny) => state.recipesReducer.sortDecending)
   const searchField: String = useSelector((state: RootStateOrAny) => state.recipesReducer.search)
   const pageOffset = useSelector((state: RootStateOrAny) => state.pageReducer.pageOffset);
   const pageSize = useSelector((state: RootStateOrAny) => state.pageReducer.pageSize);
@@ -102,6 +103,7 @@ console.log(searchField)
     variables: {
       matchedString: searchField,
       offset: pageOffset,
+      sortDecending: sortDecending ? -1 : 1
     },
   })
   
@@ -132,6 +134,7 @@ console.log(searchField)
       variables: { 
         matchedString: searchField,     
         offset: pageSize * pageNumber,
+        sortDecending: sortDecending ? -1 : 1
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         switch(query){

@@ -7,7 +7,7 @@ module.exports = {
     //returns all recipes in the database 
     recipes: async args => {
         try {
-          const recipes = await Recipes.find().sort({Name: 1}).skip(args.offset).limit(15)
+          const recipes = await Recipes.find().sort({Name: args.sortDecending}).skip(args.offset).limit(15)
     
           return recipes.map(recipe => {
             return { ...recipe._doc, _id: recipe._doc._id.toString() }
@@ -22,7 +22,7 @@ module.exports = {
             const recipes = await Recipes
             //finds recipes from database that includes the search word 
             .find({Name: {$regex: args.searchSequence, $options: 'i'}},)
-            .sort({Name: 1}).skip(args.offset).limit(15)
+            .sort({Name: args.sortDecending}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
                 return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -46,7 +46,7 @@ module.exports = {
                 {Category: "Lamb"},
                 {Category: "Goat"}
             ]})
-            .sort({Name: 1}).skip(args.offset).limit(15)
+            .sort({Name: args.sortDecending}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -59,7 +59,7 @@ module.exports = {
         try{
             const recipes = await Recipes
             .find({Category: "Dessert"})
-            .sort({Name: 1}).skip(args.offset).limit(15)
+            .sort({Name: args.sortDecending}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
@@ -72,7 +72,7 @@ module.exports = {
         try{
             const recipes = await Recipes
             .find({Category: "Breakfast"})
-            .sort({Name: 1}).skip(args.offset).limit(15)
+            .sort({Name: args.sortDecending}).skip(args.offset).limit(15)
             return recipes.map(recipe =>{
             return {...recipe._doc, _id: recipe._doc._id.toString()
             }
