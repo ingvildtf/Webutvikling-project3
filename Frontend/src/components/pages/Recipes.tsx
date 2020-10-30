@@ -161,7 +161,7 @@ const Recipes: FunctionComponent = () => {
   return (
     <React.Fragment>
       <Wrapper>
-        <SearchBar type='text' onKeyDown={(e)=> {filteredByInput(e)}} placeholder="Hva har du lyst på i dag?"  data-cy="searchBar"/>
+        <SearchBar type='text' onKeyDown={(e)=> {filteredByInput(e)}} placeholder="What would you like?"  data-cy="searchBar"/>
 
         <ButtonArea>
           <Button type="submit" onClick={()=> searchHandler() }>SØK</Button>

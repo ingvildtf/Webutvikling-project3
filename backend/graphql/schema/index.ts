@@ -24,7 +24,7 @@ module.exports = buildSchema(`
         
         type RootQuery{
             recipes(offset: Int, limit: Int, sortDecending: Int): [Recipe!]!
-            searchRecipes(searchSequence: String!, offset: Int, limit: Int, sortDecending: Int): [Recipe]
+            searchRecipes(searchSequence: String, offset: Int, limit: Int, sortDecending: Int): [Recipe!]
             dinner(offset: Int, limit: Int, sortDecending: Int): [Recipe!]!
             dessert(offset: Int, limit: Int, sortDecending: Int): [Recipe!]!
             breakfast(offset: Int, limit: Int, sortDecending: Int): [Recipe!]!
