@@ -47,3 +47,10 @@ export const filterRecipes = (dish: string)  => {
     payload: dish,
   }
 }
+
+export const sortDecending = (input: boolean)  => {
+  return {
+    type: 'SORT_DECENDING',
+    payload: input
+  }
+}

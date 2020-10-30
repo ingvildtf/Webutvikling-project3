@@ -1,7 +1,8 @@
-import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES, FETCH_BREAKFAST_RECIPES,FETCH_DESSERT_RECIPES,FILTER_RECIPES } from '../actions/types'
+import { sortDecending } from '../actions/productActions'
+import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES, FETCH_BREAKFAST_RECIPES,FETCH_DESSERT_RECIPES,FILTER_RECIPES, SORT_DECENDING} from '../actions/types'
 import { GET_RECIPE_QUERY, GET_DINNER_RECIPES, GET_BREAKFAST_RECIPES, GET_DESSERT_RECIPES, SEARCH_RECIPES } from '../queries'
 
-const initialState = {query: GET_RECIPE_QUERY, search: "", sortDecending: true }
+const initialState = {query: GET_RECIPE_QUERY, search: "", sortDecending: false }
 
 export default function (state = initialState, action: any) {
   switch (action.type) {
@@ -30,6 +31,11 @@ export default function (state = initialState, action: any) {
         ...state,
         search: action.payload,
         query: SEARCH_RECIPES,
+      }
+    case SORT_DECENDING:
+      return{
+        ...state,
+      sortDecending: action.payload
       }
     default:
       return state

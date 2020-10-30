@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react'
 import styled from 'styled-components'
 import RecipesDisplay from './RecipesDisplay'
 import {useSelector, useDispatch, AnyIfEmpty, RootStateOrAny} from 'react-redux'
-import {fetchAllRecipes, fetchDinnerRecipes, fetchBreakfastRecipes, fetchDessertRecipes, filterRecipes} from '../../actions/productActions'
+import {fetchAllRecipes, fetchDinnerRecipes, fetchBreakfastRecipes, fetchDessertRecipes, filterRecipes, sortDecending} from '../../actions/productActions'
 import {resetPage} from '../../actions/pageActions'
 
 //https://nainacodes.com/blog/create-an-
@@ -89,6 +89,9 @@ const Recipes: FunctionComponent = () => {
   const [dinnerActiveRecipe, setActiveDinner] = useState(false)
   const [breafastActiveRecipe, setActiveBreakfast] = useState(false)
   const [dessertActiveRecipe, setActiveDessert] = useState(false)
+
+  const decendingSort = useSelector((state: RootStateOrAny) => state.recipesReducer.sortDecending)
+  
   //https://www.youtube.com/watch?v=TWODzlTeZUM
   //const search = useSelector((state:RootStateOrAny) => state.recipeReducer.search)
   
@@ -96,6 +99,7 @@ const Recipes: FunctionComponent = () => {
   const dispatch = useDispatch(); 
 
   const filteredByInput = (e: React.KeyboardEvent) => {
+    console.log(e.key)
     if(e.key.length < 2){
       search += e.key;
     }
@@ -164,7 +168,7 @@ const Recipes: FunctionComponent = () => {
         </ButtonArea>
 
         <Categories>
-          <h2>Kategorier</h2>
+          <h2>Categories</h2>
 
           <CheckBox type="checkbox" checked={dinnerActiveRecipe} onClick={ ()=> {dinnerActiveRecipe? onClick('allRecipes'): onClick('dinner')}}></CheckBox>
           <label> Dinner</label>
@@ -174,6 +178,15 @@ const Recipes: FunctionComponent = () => {
           <br></br>
           <CheckBox type="checkbox" checked={dessertActiveRecipe} onClick={() => {dessertActiveRecipe? onClick('allRecipes'): onClick('dessert')}}></CheckBox>
           <label> Dessert </label>
+          <br></br>
+
+          
+          <h2>Sort By</h2>
+          <CheckBox type="checkbox" checked={!decendingSort} onClick={ ()=> {dispatch(sortDecending(!decendingSort))}}></CheckBox>
+          <label> Name - A-Z</label>
+          <br></br>
+          <CheckBox type="checkbox" checked={decendingSort} onClick={() =>{dispatch(sortDecending(!decendingSort))}}></CheckBox>
+          <label> Name - Z-A</label>
           <br></br>
         </Categories>
 
