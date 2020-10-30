@@ -7,7 +7,6 @@ import { ApolloProvider } from '@apollo/client'
 //Tag import
 
 import NavBar from './components/NavBar'
-import AboutUs from './components/pages/AboutUs'
 import Recipes from './components/pages/Recipes'
 import client from './initApollo'
 
@@ -41,7 +40,6 @@ function MainPage() {
           <Field area="content">
             <Switch>
               <Route exact path="/" component={Recipes} />
-              <Route exact path="/AboutUs" component={AboutUs}></Route>
             </Switch>
           </Field>
         </Router>

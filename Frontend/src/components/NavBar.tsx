@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  background: #afc9be; /* #faf0e6 */
+  background: #607878; /* #faf0e6 */
   height: 10vh;
   align-items: center;
   font-size: 1.2rem;
@@ -20,7 +20,7 @@ const Container = styled.div`
   padding-left: 20px;
   font-family: 'Source Sans Pro', sans-serif;
   .logo {
-    color: black;
+    color: white;
     padding: 10px 20px;
 
     text-decoration: none;
@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 
   .link {
-    color: black;
+    color: white;
     text-decoration: none;
   }
 `
@@ -39,13 +39,7 @@ function Navbar() {
     <Wrapper>
       <Container className="navbar-container container">
         <Link className="logo" to="/">
-          OPPSKRIFTER
-        </Link>
-
-        {/**Setter navigasjonen til å være drop meny når siden blir under en størrelse */}
-
-        <Link className="link" to="/AboutUs">
-          Om oss
+          A RECIPE FOR SUCCESS
         </Link>
       </Container>
     </Wrapper>
