@@ -28,8 +28,8 @@ export default function (state = initialState, action: any) {
     case FILTER_RECIPES:
       return {
         ...state,
+        search: action.payload,
         query: SEARCH_RECIPES,
-        search: action.payload
       }
     default:
       return state

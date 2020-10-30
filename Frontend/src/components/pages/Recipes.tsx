@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import styled from 'styled-components'
 import RecipesDisplay from './RecipesDisplay'
 import {useSelector, useDispatch, AnyIfEmpty, RootStateOrAny} from 'react-redux'
-import {fetchAllRecipes, fetchDinnerRecipes, fetchBreakfastRecipes, fetchDessertRecipes} from '../../actions/productActions'
+import {fetchAllRecipes, fetchDinnerRecipes, fetchBreakfastRecipes, fetchDessertRecipes, filterRecipes} from '../../actions/productActions'
 import {resetPage} from '../../actions/pageActions'
 
 //https://nainacodes.com/blog/create-an-
@@ -86,8 +86,12 @@ const Recipe = styled.div`
 `
 
 const Recipes: FunctionComponent = () => {
+  const [dinnerActiveRecipe, setActiveDinner] = useState(false)
+  const [breafastActiveRecipe, setActiveBreakfast] = useState(false)
+  const [dessertActiveRecipe, setActiveDessert] = useState(false)
   //https://www.youtube.com/watch?v=TWODzlTeZUM
   //const search = useSelector((state:RootStateOrAny) => state.recipeReducer.search)
+  
   let search = ""; 
   const dispatch = useDispatch(); 
 
@@ -95,13 +99,24 @@ const Recipes: FunctionComponent = () => {
     if(e.key.length < 2){
       search += e.key;
     }
-    if(e.key == "Backspace"){
+    if(e.key === "Backspace"){
       let word = search
       search = ""
       for(let i = 0; i < word.length-1; i ++){
         search += word.charAt(i)
       }
     }
+    console.log(search)
+  }
+
+
+  const searchHandler = ()=> {
+    dispatch(resetPage());
+    dispatch(filterRecipes(search))
+    setActiveDinner(false)
+    setActiveBreakfast(false)
+    setActiveDessert(false)
+
   }
 
   const onClick = (action:any) => {
@@ -109,18 +124,30 @@ const Recipes: FunctionComponent = () => {
       case 'dinner':
         dispatch(resetPage());
         dispatch(fetchDinnerRecipes());
+        setActiveDinner(true)
+        setActiveBreakfast(false)
+        setActiveDessert(false)
         return 
       case 'breakfast':
         dispatch(resetPage());
         dispatch(fetchBreakfastRecipes());
+        setActiveDinner(false)
+        setActiveBreakfast(true)
+        setActiveDessert(false)
         return 
       case 'dessert':
         dispatch(resetPage());
         dispatch(fetchDessertRecipes());
+        setActiveDinner(false)
+        setActiveBreakfast(false)
+        setActiveDessert(true)
         return 
       case 'allRecipes':
         dispatch(resetPage());
         dispatch(fetchAllRecipes());
+        setActiveDinner(false)
+        setActiveBreakfast(false)
+        setActiveDessert(false)
         return 
       default:
         return 
@@ -133,19 +160,19 @@ const Recipes: FunctionComponent = () => {
         <SearchBar type='text' onKeyDown={(e)=> {filteredByInput(e)}} placeholder="Hva har du lyst på i dag?"  data-cy="searchBar"/>
 
         <ButtonArea>
-          <Button type="submit">SØK</Button>
+          <Button type="submit" onClick={()=> searchHandler() }>SØK</Button>
         </ButtonArea>
 
         <Categories>
           <h2>Kategorier</h2>
 
-          <CheckBox type="checkbox" onClick={ ()=> onClick('dinner')}></CheckBox>
+          <CheckBox type="checkbox" checked={dinnerActiveRecipe} onClick={ ()=> {dinnerActiveRecipe? onClick('allRecipes'): onClick('dinner')}}></CheckBox>
           <label> Dinner</label>
           <br></br>
-          <CheckBox type="checkbox" onClick={() => onClick('breakfast')}></CheckBox>
+          <CheckBox type="checkbox" checked={breafastActiveRecipe} onClick={() =>{breafastActiveRecipe ? onClick('allRecipes'): onClick('breakfast')}}></CheckBox>
           <label> Breakfast</label>
           <br></br>
-          <CheckBox type="checkbox" onClick={() => onClick('dessert')}></CheckBox>
+          <CheckBox type="checkbox" checked={dessertActiveRecipe} onClick={() => {dessertActiveRecipe? onClick('allRecipes'): onClick('dessert')}}></CheckBox>
           <label> Dessert </label>
           <br></br>
         </Categories>

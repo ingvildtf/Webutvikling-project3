@@ -55,7 +55,7 @@ export const GET_BREAKFAST_RECIPES = gql`
   }
 }`
 export const SEARCH_RECIPES = gql`
-  query SearchRecipesQuery($matchedString: String!, $offset: Int, $limit: Int) {
+  query SearchRecipesQuery($matchedString: String, $offset: Int, $limit: Int) {
     searchRecipes(searchSequence: $matchedString, limit: $limit, offset: $offset) {
       ID
       Name
