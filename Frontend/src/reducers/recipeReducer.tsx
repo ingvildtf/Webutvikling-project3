@@ -4,6 +4,7 @@ import {
   FETCH_BREAKFAST_RECIPES,
   FETCH_DESSERT_RECIPES,
   FILTER_RECIPES,
+  SORT_DECENDING
 } from '../actions/types'
 import {
   GET_RECIPE_QUERY,
@@ -16,8 +17,8 @@ import {
 const initialState = {
   query: GET_RECIPE_QUERY,
   search: '',
-  sortDecending: true,
   activeRecipe: '',
+  sortDecending: false,
 }
 
 export default function (state = initialState, action: any) {
@@ -45,8 +46,13 @@ export default function (state = initialState, action: any) {
     case FILTER_RECIPES:
       return {
         ...state,
-        query: SEARCH_RECIPES,
         search: action.payload,
+        query: SEARCH_RECIPES,
+      }
+    case SORT_DECENDING:
+      return{
+        ...state,
+      sortDecending: action.payload
       }
     default:
       return state

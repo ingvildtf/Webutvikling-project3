@@ -13,6 +13,7 @@ import {
   GET_BREAKFAST_RECIPES,
   GET_DESSERT_RECIPES,
   GET_REVIEWS,
+  SEARCH_RECIPES ,
 } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
@@ -106,6 +107,8 @@ const RecipesDisplay: FunctionComponent = () => {
   const query = useSelector(
     (state: RootStateOrAny) => state.recipesReducer.query
   )
+  const sortDecending: Boolean = useSelector((state: RootStateOrAny) => state.recipesReducer.sortDecending)
+  const searchField: String = useSelector((state: RootStateOrAny) => state.recipesReducer.search)
   const pageOffset = useSelector(
     (state: RootStateOrAny) => state.pageReducer.pageOffset
   )
@@ -119,12 +122,16 @@ const RecipesDisplay: FunctionComponent = () => {
   /* const pageSize = 15
   const [pageOffset, setPageOffset] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)*/
+console.log(searchField)
 
   const { loading, error, data, fetchMore } = useQuery(query, {
     variables: {
+      matchedString: searchField,
       offset: pageOffset,
+      sortDecending: sortDecending ? -1 : 1
     },
   })
+  
 
   const queryName = (query: any) => {
     switch (query) {
@@ -136,6 +143,8 @@ const RecipesDisplay: FunctionComponent = () => {
         return Object(data.breakfast)
       case GET_DESSERT_RECIPES:
         return Object(data.dessert)
+      case SEARCH_RECIPES:
+        return Object(data.searchRecipes)
       default:
         return Object(data.recipes)
     }
@@ -146,8 +155,10 @@ const RecipesDisplay: FunctionComponent = () => {
 
   const fetchMoreRecipes = () => {
     fetchMore({
-      variables: {
+      variables: { 
+        matchedString: searchField,     
         offset: pageSize * pageNumber,
+        sortDecending: sortDecending ? -1 : 1
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         switch (query) {
@@ -175,6 +186,11 @@ const RecipesDisplay: FunctionComponent = () => {
             dispatch(incrementPage())
             return Object.assign({}, prev, {
               breakfast: [...prev.breakfast, ...fetchMoreResult.breakfast],
+            })
+          case SEARCH_RECIPES:
+            dispatch(incrementPage());
+            return Object.assign({}, prev, {
+              searchRecipes: [...prev.searchRecipes, ...fetchMoreResult.searchRecipes],
             })
           default:
             dispatch(incrementPage())

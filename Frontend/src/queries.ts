@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const GET_RECIPE_QUERY = gql`
-  query Recipes($offset: Int, $limit: Int) {
-    recipes(limit: $limit, offset: $offset) {
+  query Recipes($offset: Int, $limit: Int, $sortDecending: Int) {
+    recipes(limit: $limit, offset: $offset, sortDecending: $sortDecending) {
       ID
       Name
       Category
@@ -15,8 +15,8 @@ export const GET_RECIPE_QUERY = gql`
 `
 
 export const GET_DINNER_RECIPES = gql`
-  query Dinners($offset: Int, $limit: Int) {
-    dinner(limit: $limit, offset: $offset) {
+  query Dinners($offset: Int, $limit: Int, $sortDecending: Int) {
+    dinner(limit: $limit, offset: $offset, sortDecending: $sortDecending) {
       ID
       Name
       Category
@@ -29,8 +29,8 @@ export const GET_DINNER_RECIPES = gql`
 `
 
 export const GET_DESSERT_RECIPES = gql`
-  query Desserts($offset: Int, $limit: Int) {
-    dessert(limit: $limit, offset: $offset) {
+  query Desserts($offset: Int, $limit: Int, $sortDecending: Int) {
+    dessert(limit: $limit, offset: $offset, sortDecending: $sortDecending) {
       ID
       Name
       Category
@@ -43,8 +43,8 @@ export const GET_DESSERT_RECIPES = gql`
 `
 
 export const GET_BREAKFAST_RECIPES = gql`
-  query Breakfasts($offset: Int, $limit: Int) {
-    breakfast(limit: $limit, offset: $offset) {
+  query Breakfasts($offset: Int, $limit: Int, $sortDecending: Int) {
+    breakfast(limit: $limit, offset: $offset, sortDecending: $sortDecending) {
       ID
       Name
       Category
@@ -56,12 +56,8 @@ export const GET_BREAKFAST_RECIPES = gql`
   }
 `
 export const SEARCH_RECIPES = gql`
-  query SearchRecipesQuery($matchedString: String!, $offset: Int, $limit: Int) {
-    searchRecipes(
-      searchSequence: $matchedString
-      limit: $limit
-      offset: $offset
-    ) {
+  query SearchRecipesQuery($matchedString: String, $offset: Int, $limit: Int, $sortDecending: Int) {
+    searchRecipes(searchSequence: $matchedString, limit: $limit, offset: $offset, sortDecending: $sortDecending) {
       ID
       Name
       Category
