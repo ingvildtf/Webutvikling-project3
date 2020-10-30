@@ -26,14 +26,14 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "redux": "^4.0.5",
-    "styled-components": "^5.2.0",
-    "typescript": "~3.7.2"
+    "styled-components": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cy:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^5.5.0",
+    "typescript": "^3.7.5"
   }
 }
