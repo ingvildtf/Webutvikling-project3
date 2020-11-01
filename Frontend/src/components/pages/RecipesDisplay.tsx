@@ -12,16 +12,14 @@ import {
   GET_DINNER_RECIPES,
   GET_BREAKFAST_RECIPES,
   GET_DESSERT_RECIPES,
-  GET_REVIEWS,
-  SEARCH_RECIPES ,
+  SEARCH_RECIPES,
 } from '../../queries'
 import BottomScrollListener from 'react-bottom-scroll-listener'
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
-import {addRating} from '../../actions/reviewAction'
+import { addRating } from '../../actions/reviewAction'
 import { incrementPage } from '../../actions/pageActions'
-import { FETCH_ALL_RECIPES, FETCH_DINNER_RECIPES } from '../../actions/types'
-import pageReducer from '../../reducers/pageReducer'
 
+//CSS-styling
 export const Wrapper = styled.div`
   margin-top: 10px;
   display: flex;
@@ -104,11 +102,16 @@ const RecipesDisplay: FunctionComponent = () => {
     if (activeRecipe !== undefined) openModal()
   }, [activeRecipe])
 
+  //Redux managing state
   const query = useSelector(
     (state: RootStateOrAny) => state.recipesReducer.query
   )
-  const sortDecending: Boolean = useSelector((state: RootStateOrAny) => state.recipesReducer.sortDecending)
-  const searchField: String = useSelector((state: RootStateOrAny) => state.recipesReducer.search)
+  const sortDecending: Boolean = useSelector(
+    (state: RootStateOrAny) => state.recipesReducer.sortDecending
+  )
+  const searchField: String = useSelector(
+    (state: RootStateOrAny) => state.recipesReducer.search
+  )
   const pageOffset = useSelector(
     (state: RootStateOrAny) => state.pageReducer.pageOffset
   )
@@ -119,19 +122,15 @@ const RecipesDisplay: FunctionComponent = () => {
     (state: RootStateOrAny) => state.pageReducer.pageNumber
   )
   const dispatch = useDispatch()
-  /* const pageSize = 15
-  const [pageOffset, setPageOffset] = useState(0)
-  const [pageNumber, setPageNumber] = useState(1)*/
-console.log(searchField)
 
+  //Query for fetching data from database
   const { loading, error, data, fetchMore } = useQuery(query, {
     variables: {
       matchedString: searchField,
       offset: pageOffset,
-      sortDecending: sortDecending ? -1 : 1
+      sortDecending: sortDecending ? -1 : 1,
     },
   })
-  
 
   const queryName = (query: any) => {
     switch (query) {
@@ -153,12 +152,13 @@ console.log(searchField)
   if (loading) return <CardRatingWrapper>Loading...</CardRatingWrapper>
   if (error) return <CardRatingWrapper>Error!</CardRatingWrapper>
 
+  //Pagination, fetches more recipes from database
   const fetchMoreRecipes = () => {
     fetchMore({
-      variables: { 
-        matchedString: searchField,     
+      variables: {
+        matchedString: searchField,
         offset: pageSize * pageNumber,
-        sortDecending: sortDecending ? -1 : 1
+        sortDecending: sortDecending ? -1 : 1,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         switch (query) {
@@ -172,8 +172,6 @@ console.log(searchField)
             })
           case GET_DINNER_RECIPES:
             dispatch(incrementPage())
-            /* setPageOffset(pageOffset + pageSize)
-            setPageNumber(pageNumber + 1)*/
             return Object.assign({}, prev, {
               dinner: [...prev.dinner, ...fetchMoreResult.dinner],
             })
@@ -188,9 +186,12 @@ console.log(searchField)
               breakfast: [...prev.breakfast, ...fetchMoreResult.breakfast],
             })
           case SEARCH_RECIPES:
-            dispatch(incrementPage());
+            dispatch(incrementPage())
             return Object.assign({}, prev, {
-              searchRecipes: [...prev.searchRecipes, ...fetchMoreResult.searchRecipes],
+              searchRecipes: [
+                ...prev.searchRecipes,
+                ...fetchMoreResult.searchRecipes,
+              ],
             })
           default:
             dispatch(incrementPage())
@@ -200,22 +201,14 @@ console.log(searchField)
               recipes: [...prev.recipes, ...fetchMoreResult.recipes],
             })
         }
-
-        /*if (!fetchMoreResult) return prev
-        setPageOffset(pageOffset + pageSize)
-        setPageNumber(pageNumber + 1)
-        
-        return Object.assign({}, prev, {
-          dinner: [...prev.dinner, ...fetchMoreResult.dinner],
-        })*/
       },
     })
   }
 
-  const activateRecipe = (recipe:any) => {
+  //Redux saves active recipe-state
+  const activateRecipe = (recipe: any) => {
     setActiveRecipe(recipe)
     dispatch(addRating(recipe.ID))
-    console.log(typeof(recipe.ID))
   }
 
   return (

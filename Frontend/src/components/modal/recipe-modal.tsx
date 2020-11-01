@@ -10,7 +10,7 @@ import {
 import BeautyStars from 'beauty-stars'
 import { ADD_REVIEW, GET_REVIEWS } from '../../queries'
 import { useMutation } from '@apollo/client'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useSelector } from 'react-redux'
 
 interface ConfirmationModalProps {
   closeModal: () => void
@@ -30,37 +30,11 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
 }) => {
   const { Name, Ingredients, Instruction, Image } = recipe
   const [stars, setStars] = useState(0) //Tester
-  let recipeId: String = useSelector( (state: RootStateOrAny) => state.reviewReducer.recipeID)
-  const dispatch = useDispatch()
+  let recipeId: String = useSelector(
+    (state: RootStateOrAny) => state.reviewReducer.recipeID
+  )
 
-  /*   const handleSubmit = () => {
-    dispatch(
-      addReview({
-        variables: {
-          matchedString: activeRecipe,
-          addReview: stars,
-        },
-      })
-    )
-    setStars(0)
-  } */
-  /*   const [addReview] = useMutation(ADD_REVIEW, {
-    update(cache, { data: { addReview } }) {
-      //this updates the review chahe with the new review from ADD_REVIEW
-      const { review } = cache.readQuery({
-        query: GET_REVIEWS,
-        variables: { id: activeRecipe },
-      })
-      cache.writeQuery({
-        query: GET_REVIEWS,
-        variables: { id: activeRecipe, star: stars },
-        data: { review: [...[addReview], ...review] },
-      })
-    },
-  }) */
-
-  console.log(recipeId)
-
+  //Handling rating from user-input
   const [addReview] = useMutation(ADD_REVIEW, {
     update(cache, { data: { addReview } }) {
       const { reviews } = cache.readQuery<any>({
@@ -75,8 +49,12 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
         data: { reviews: [...[addReview], ...reviews] },
       })
     },
+    onError() {
+      window.location.reload(false)
+    },
   })
 
+  //Triggered when user gives rating
   const updateReview = (value: number) => {
     setStars(value)
     addReview({
@@ -85,7 +63,6 @@ export const RecipeModal: FunctionComponent<ConfirmationModalProps> = ({
         addReview: value,
       },
     })
-    console.log(value)
   }
 
   return (

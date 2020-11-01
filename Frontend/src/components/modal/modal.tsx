@@ -22,6 +22,7 @@ export const Modal: FunctionComponent<ModalProps> = ({
   }
 
   useEffect(() => {
+    //Stops page from scrolling when modal is open
     isShown
       ? (document.body.style.overflow = 'hidden')
       : (document.body.style.overflow = 'unset')
