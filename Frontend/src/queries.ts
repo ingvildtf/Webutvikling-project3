@@ -56,8 +56,18 @@ export const GET_BREAKFAST_RECIPES = gql`
   }
 `
 export const SEARCH_RECIPES = gql`
-  query SearchRecipesQuery($matchedString: String, $offset: Int, $limit: Int, $sortDecending: Int) {
-    searchRecipes(searchSequence: $matchedString, limit: $limit, offset: $offset, sortDecending: $sortDecending) {
+  query SearchRecipesQuery(
+    $matchedString: String
+    $offset: Int
+    $limit: Int
+    $sortDecending: Int
+  ) {
+    searchRecipes(
+      searchSequence: $matchedString
+      limit: $limit
+      offset: $offset
+      sortDecending: $sortDecending
+    ) {
       ID
       Name
       Category
@@ -72,20 +82,16 @@ export const SEARCH_RECIPES = gql`
 export const ADD_REVIEW = gql`
   mutation AddReview($matchedString: String!, $addReview: Int) {
     addReview(id: $matchedString, star: $addReview) {
-      result
+      ID
+      Review
     }
   }
 `
 
 export const GET_REVIEWS = gql`
-  query GetReview($matchedString: String!) {
-    reviews(id: $matchedString) {
+  query GetReview($matchedString: String!, $offset: Int) {
+    reviews(id: $matchedString, offset: $offset) {
       ID
-      Name
-      Category
-      Instruction
-      Ingredients
-      Image
       Review
     }
   }
