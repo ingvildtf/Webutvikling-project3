@@ -4,7 +4,11 @@
 
 Viktig å være tilkoblet VPN/ NTNU sitt nett.
 
+<<<<<<< HEAD
 - Kjør `cd backend && npm install && npm install body-parser && node server.ts ` i en terminal
+=======
+- Kjør `cd backend && npm install && node server.ts ` i en terminal
+>>>>>>> 627e7b67667dc2a43748477e5ac4e8f4efa2aff9
 - Kjør `cd Frontend && npm install && npm start ` i en annen terminal
 
 <br>
@@ -87,6 +91,10 @@ For Sortering har vi gjort det på samme måte som filtrering ved å ha checkbox
 For brukergenerert data har vi laget en rating-mulighet inne i modalen. Dette implementerte vi ved å bruke useMutation-hooken fra Apollo Client, samt å lagre staten ved hjelp av Redux. Etter at brukeren har gitt en vurdering vil siden bli lastet inn på nytt, og vurderingen vil bli en del av gjennsnitts-ratingen som vises på forsiden. Det er mulgihet til å gi så mange vurderinger man ønsker, noe som kanskje ikke er helt iddelt. Man får heller ikke sett hvilken vurdering man har gitt tidligere, noe som hadde vært fint å implementere, men det rakk vi ikke denne gangen.
 
 <br>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 627e7b67667dc2a43748477e5ac4e8f4efa2aff9
 
 ## Testing
 
