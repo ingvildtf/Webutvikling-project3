@@ -3,6 +3,11 @@
 ## For å starte prosjektet:
 
 Viktig å være tilkoblet VPN/ NTNU sitt nett.
+For å kjøre prosjektet må man ha node versjon under 12.16. For å få en riktig versjon kjør `nvm install 10.19.0`. Dersom man ikke har nvm installert på pcen kan man finne fremgangmåte her:
+
+- Linux: https://tecadmin.net/how-to-install-nvm-on-ubuntu-20-04/
+- Windows: https://docs.microsoft.com/en-us/windows/nodejs/setup-on-windows
+- Mac: https://www.codementor.io/@mercurial/how-to-install-node-js-on-macos-sierra-mphz41ekk
 
 - Kjør `cd backend && npm install && npm install body-parser && node server.ts ` i en terminal
 - Kjør `cd Frontend && npm install && npm start ` i en annen terminal
